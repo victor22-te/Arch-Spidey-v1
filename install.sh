@@ -56,7 +56,10 @@ chmod +x "$TARGET_HOME/.local/bin/spider-hud" "$TARGET_HOME/.local/bin/lyla-widg
 
 cp "$REPO_DIR/local/share/applications/"*.desktop "$TARGET_HOME/.local/share/applications/"
 cp "$REPO_DIR/local/share/icons/hicolor/scalable/apps/spiderman-2099.svg" "$TARGET_HOME/.local/share/icons/hicolor/scalable/apps/"
-cp -r "$REPO_DIR/local/share/gnome-shell/extensions/spider-hud@spiderman.2099" "$TARGET_HOME/.local/share/gnome-shell/extensions/"
+cp -r "$REPO_DIR/local/share/gnome-shell/extensions/"* "$TARGET_HOME/.local/share/gnome-shell/extensions/"
+mkdir -p "$TARGET_HOME/.local/share/glib-2.0/schemas"
+cp -r "$REPO_DIR/local/share/glib-2.0/schemas/"* "$TARGET_HOME/.local/share/glib-2.0/schemas/" 2>/dev/null || true
+glib-compile-schemas "$TARGET_HOME/.local/share/glib-2.0/schemas" 2>/dev/null || true
 cp -r "$REPO_DIR/local/share/themes/SpiderMan-2099-Cyber" "$TARGET_HOME/.local/share/themes/"
 cp -r "$REPO_DIR/local/share/themes/SpiderMan-2099-Cyber" "$TARGET_HOME/.themes/"
 
@@ -97,7 +100,8 @@ gsettings set org.gnome.desktop.screensaver picture-uri "file://$TARGET_HOME/Pic
 gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
 
 gsettings set org.gnome.shell disable-user-extensions false
-gsettings set org.gnome.shell enabled-extensions "['spider-hud@spiderman.2099']"
+gsettings set org.gnome.shell enabled-extensions "['spider-hud@spiderman.2099', 'user-theme@gnome-shell-extensions.gcampax.github.com']"
+gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.user-theme name 'SpiderMan-2099-Cyber' 2>/dev/null || true
 gsettings set org.gnome.shell favorite-apps "['kitty.desktop', 'lyla-widget.desktop', 'spider-hud.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Epiphany.desktop', 'org.gnome.Settings.desktop']"
 
 # Atajos de teclado

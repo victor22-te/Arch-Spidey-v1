@@ -9,6 +9,8 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
+const THEME_CSS = GLib.get_home_dir() + '/.themes/SpiderMan-2099-Cyber/gnome-shell/gnome-shell.css';
+
 const SpiderHudIndicator = GObject.registerClass(
 class SpiderHudIndicator extends PanelMenu.Button {
     _init() {
@@ -57,7 +59,11 @@ class SpiderHudIndicator extends PanelMenu.Button {
     _buildMenu() {
         // Header
         const headerItem = new PopupMenu.PopupBaseMenuItem({reactive: false});
-        const headerBox = new St.BoxLayout({vertical: true});
+        const headerBox = new St.BoxLayout();
+        if ('orientation' in headerBox && Clutter.Orientation) {
+            headerBox.orientation = Clutter.Orientation.VERTICAL;
+        }
+
         headerBox.add_child(new St.Label({
             text: '🕸 ALCHEMAX // MIGUEL O’HARA CYBER-HUD v2099',
             style_class: 'spider-hud-menu-header',
@@ -116,7 +122,6 @@ class SpiderHudIndicator extends PanelMenu.Button {
     }
 
     _updateMetrics() {
-        // CPU calculation from /proc/stat
         let cpuPct = 0;
         const statText = this._readFileContents('/proc/stat');
         if (statText) {
@@ -135,7 +140,6 @@ class SpiderHudIndicator extends PanelMenu.Button {
             }
         }
 
-        // RAM calculation from /proc/meminfo
         let ramPct = 0;
         let usedGb = '0.0';
         let totalGb = '0.0';
@@ -184,14 +188,37 @@ class SpiderHudIndicator extends PanelMenu.Button {
 
 export default class SpiderHudExtension extends Extension {
     enable() {
-        this._indicator = new SpiderHudIndicator();
-        Main.panel.addToStatusArea(this.uuid, this._indicator, 1, 'left');
+        // 1. Force-load custom Spider-Man 2099 Cyber-HUD GNOME Shell stylesheet
+        try {
+            const themeFile = Gio.File.new_for_path(THEME_CSS);
+            if (themeFile.query_exists(null)) {
+                Main.setThemeStylesheet(THEME_CSS);
+                Main.loadTheme();
+            }
+        } catch (e) {
+            console.error('Error applying 2099 shell theme stylesheet:', e);
+        }
+
+        // 2. Add Top Panel Telemetry & Menu Indicator
+        try {
+            this._indicator = new SpiderHudIndicator();
+            Main.panel.addToStatusArea(this.uuid, this._indicator, 1, 'left');
+        } catch (e) {
+            console.error('Error creating 2099 status indicator:', e);
+        }
     }
 
     disable() {
         if (this._indicator) {
             this._indicator.destroy();
             this._indicator = null;
+        }
+
+        try {
+            Main.setThemeStylesheet(null);
+            Main.loadTheme();
+        } catch (e) {
+            console.error('Error resetting shell stylesheet:', e);
         }
     }
 }

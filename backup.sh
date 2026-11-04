@@ -24,7 +24,9 @@ cp ~/.local/bin/lyla-widget "$REPO_DIR/local/bin/"
 cp ~/.local/share/applications/lyla-widget.desktop "$REPO_DIR/local/share/applications/"
 cp ~/.local/share/applications/spider-hud.desktop "$REPO_DIR/local/share/applications/"
 cp ~/.local/share/icons/hicolor/scalable/apps/spiderman-2099.svg "$REPO_DIR/local/share/icons/hicolor/scalable/apps/"
-cp -r ~/.local/share/gnome-shell/extensions/spider-hud@spiderman.2099 "$REPO_DIR/local/share/gnome-shell/extensions/"
+cp -r ~/.local/share/gnome-shell/extensions/* "$REPO_DIR/local/share/gnome-shell/extensions/"
+mkdir -p "$REPO_DIR/local/share/glib-2.0/schemas"
+cp -r ~/.local/share/glib-2.0/schemas/* "$REPO_DIR/local/share/glib-2.0/schemas/" 2>/dev/null || true
 cp -r ~/.local/share/themes/SpiderMan-2099-Cyber "$REPO_DIR/local/share/themes/"
 
 cp ~/Pictures/spiderman_2099_cyber.jpg "$REPO_DIR/wallpapers/"

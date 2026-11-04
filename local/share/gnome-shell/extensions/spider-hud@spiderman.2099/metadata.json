@@ -1,0 +1,9 @@
+{
+  "name": "Spider-Man 2099 Cyber-HUD (LYLA)",
+  "description": "Interfaz holográfica futurista Spider-Man 2099 / Miguel O'Hara con telemetría LYLA en tiempo real, calendario/notificaciones neón carmesí/cian, pantalla de bloqueo y dock cibernético.",
+  "uuid": "spider-hud@spiderman.2099",
+  "version": 2,
+  "shell-version": ["45", "46", "47", "48", "49", "50", "51"],
+  "session-modes": ["user", "unlock-dialog"],
+  "url": "https://archlinux.org"
+}

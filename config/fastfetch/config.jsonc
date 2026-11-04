@@ -1,0 +1,100 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "source": "~/.config/fastfetch/ascii.txt",
+    "color": {
+      "1": "#ff2a4b"
+    },
+    "padding": {
+      "top": 1,
+      "right": 2
+    }
+  },
+  "display": {
+    "separator": " "
+  },
+  "modules": [
+    {
+      "type": "custom",
+      "format": "\u001b[1;38;2;255;42;75m╔═══════════ \u001b[1;38;2;0;240;255m🕷 SPIDER-MAN 2099 // LYLA HUD\u001b[1;38;2;255;42;75m ═══════════╗"
+    },
+    {
+      "type": "title",
+      "key": "\u001b[38;2;255;42;75m║\u001b[0m 🕷  Operador ",
+      "format": "\u001b[1;38;2;255;42;75m{1}\u001b[38;2;0;240;255m@\u001b[1;38;2;0;153;255m{2} \u001b[38;2;86;95;137m[NUEVA YORK 2099]",
+      "keyColor": "#ff2a4b"
+    },
+    {
+      "type": "os",
+      "key": "\u001b[38;2;255;42;75m║\u001b[0m 󰣇  Sistema  ",
+      "format": "{2} ({12})",
+      "keyColor": "#ff2a4b"
+    },
+    {
+      "type": "kernel",
+      "key": "\u001b[38;2;255;42;75m║\u001b[0m   Núcleo   ",
+      "format": "{1} {2}",
+      "keyColor": "#ff2a4b"
+    },
+    {
+      "type": "packages",
+      "key": "\u001b[38;2;255;42;75m║\u001b[0m 󰏖  Módulos  ",
+      "keyColor": "#ff2a4b"
+    },
+    {
+      "type": "shell",
+      "key": "\u001b[38;2;255;42;75m║\u001b[0m   Shell    ",
+      "keyColor": "#ff2a4b"
+    },
+    {
+      "type": "terminal",
+      "key": "\u001b[38;2;255;42;75m║\u001b[0m   Terminal ",
+      "keyColor": "#ff2a4b"
+    },
+    {
+      "type": "wm",
+      "key": "\u001b[38;2;255;42;75m║\u001b[0m   Entorno  ",
+      "format": "GNOME 51 // Cyber-HUD ({2})",
+      "keyColor": "#ff2a4b"
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[1;38;2;0;240;255m╠═════════════ \u001b[1;38;2;255;42;75m⚡ TELEMETRÍA BIOMÉTRICA\u001b[1;38;2;0;240;255m ══════════════╣"
+    },
+    {
+      "type": "cpu",
+      "format": "{1}",
+      "key": "\u001b[38;2;0;240;255m║\u001b[0m   CPU      ",
+      "keyColor": "#00f0ff"
+    },
+    {
+      "type": "gpu",
+      "key": "\u001b[38;2;0;240;255m║\u001b[0m 󰢮  GPU      ",
+      "format": "{1} {2}",
+      "keyColor": "#00f0ff"
+    },
+    {
+      "type": "memory",
+      "key": "\u001b[38;2;0;240;255m║\u001b[0m 󰍛  Memoria  ",
+      "keyColor": "#00f0ff"
+    },
+    {
+      "type": "disk",
+      "key": "\u001b[38;2;0;240;255m║\u001b[0m 󰋊  Matriz   ",
+      "keyColor": "#00f0ff"
+    },
+    {
+      "type": "uptime",
+      "key": "\u001b[38;2;0;240;255m║\u001b[0m   En línea ",
+      "keyColor": "#00f0ff"
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[1;38;2;0;240;255m╚══════════════════════════════════════════════════════╝"
+    },
+    {
+      "type": "custom",
+      "format": "  \u001b[1;38;2;255;42;75m🕸 [LYLA: ONLINE]  \u001b[38;2;255;42;75m━━━ \u001b[38;2;0;240;255m━━━ \u001b[38;2;0;153;255m━━━ \u001b[38;2;192;132;252m━━━ \u001b[38;2;74;222;128m━━━  \u001b[1;38;2;0;240;255m⚡ Ejecuta: \u001b[1;38;2;255;42;75mlyla\u001b[0m"
+    }
+  ]
+}

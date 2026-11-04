@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=SpiderMan-2099-Cyber
+Comment=Spider-Man 2099 / Miguel O'Hara Cyber-HUD Theme for Arch Linux
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=SpiderMan-2099-Cyber
+MetacityTheme=SpiderMan-2099-Cyber
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=appmenu:minimize,maximize,close

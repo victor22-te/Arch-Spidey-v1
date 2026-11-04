@@ -1,0 +1,9 @@
+[/]
+accent-color='red'
+clock-show-seconds=true
+clock-show-weekday=true
+color-scheme='prefer-dark'
+cursor-blink-time=1200
+gtk-theme='SpiderMan-2099-Cyber'
+monospace-font-name='JetBrainsMono Nerd Font 11'
+show-battery-percentage=true

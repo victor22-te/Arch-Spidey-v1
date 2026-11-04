@@ -1,0 +1,27 @@
+[/]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider4/']
+
+[custom-keybindings/spider0]
+binding='<Super>Return'
+command='/usr/bin/kitty'
+name='Cyber-Terminal (Super+Enter)'
+
+[custom-keybindings/spider1]
+binding='<Super>s'
+command='/usr/bin/kitty --title "LYLA // SPIDER-MAN 2099 TACTICAL HUD" -e /home/spider-man/.local/bin/spider-hud'
+name='LYLA Tactical Monitor (Super+S)'
+
+[custom-keybindings/spider2]
+binding='<Super>h'
+command='/home/spider-man/.local/bin/lyla-widget'
+name='LYLA 2099 Widget (Super+H)'
+
+[custom-keybindings/spider3]
+binding='<Control><Alt>t'
+command='/usr/bin/kitty'
+name='Cyber-Terminal (Ctrl+Alt+T)'
+
+[custom-keybindings/spider4]
+binding='<Control><Alt>s'
+command='/usr/bin/kitty --title "LYLA // SPIDER-MAN 2099 TACTICAL HUD" -e /home/spider-man/.local/bin/spider-hud'
+name='LYLA Tactical Monitor (Ctrl+Alt+S)'

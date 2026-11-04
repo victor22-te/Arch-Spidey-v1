@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#141b33"/>
+      <stop offset="100%" stop-color="#070911"/>
+    </radialGradient>
+  </defs>
+  <rect width="256" height="256" rx="52" fill="url(#bg)" stroke="#00f0ff" stroke-width="6"/>
+  <circle cx="128" cy="128" r="96" fill="none" stroke="#00f0ff" stroke-width="2" stroke-dasharray="12 8" opacity="0.6"/>
+  <circle cx="128" cy="128" r="72" fill="none" stroke="#ff2a4b" stroke-width="2" opacity="0.5"/>
+  <!-- Spider-Man 2099 Cyber Legs -->
+  <g stroke="#ff2a4b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <polyline points="106,105 64,62 82,24"/>
+    <polyline points="100,120 42,96 28,54"/>
+    <polyline points="102,138 46,162 34,206"/>
+    <polyline points="110,154 72,196 90,234"/>
+    <polyline points="150,105 192,62 174,24"/>
+    <polyline points="156,120 214,96 228,54"/>
+    <polyline points="154,138 210,162 222,206"/>
+    <polyline points="146,154 184,196 166,234"/>
+  </g>
+  <!-- Skull-Spider Center -->
+  <polygon points="128,74 156,106 146,158 128,184 110,158 100,106" fill="#ff2a4b" stroke="#00f0ff" stroke-width="4"/>
+  <polygon points="112,112 124,120 112,124" fill="#070911"/>
+  <polygon points="144,112 132,120 144,124" fill="#070911"/>
+  <line x1="120" y1="158" x2="120" y2="174" stroke="#070911" stroke-width="4"/>
+  <line x1="128" y1="158" x2="128" y2="178" stroke="#070911" stroke-width="4"/>
+  <line x1="136" y1="158" x2="136" y2="174" stroke="#070911" stroke-width="4"/>
+</svg>

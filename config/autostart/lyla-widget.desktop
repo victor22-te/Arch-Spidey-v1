@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=LYLA 2099 // Cyber-HUD Deck
+Comment=Panel holográfico interactivo Spider-Man 2099 para GNOME
+Exec=/home/spider-man/.local/bin/lyla-widget
+Icon=/home/spider-man/.local/share/icons/hicolor/scalable/apps/spiderman-2099.svg
+Terminal=false
+Type=Application
+Categories=System;Utility;
+StartupNotify=false

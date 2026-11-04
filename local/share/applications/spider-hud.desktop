@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Spider-Sense // Monitor Táctico 2099
+Comment=Monitor de telemetría y radar multiversal Spider-Man 2099 en Kitty
+Exec=kitty --title "LYLA // SPIDER-MAN 2099 TACTICAL HUD" -e /home/spider-man/.local/bin/spider-hud
+Icon=/home/spider-man/.local/share/icons/hicolor/scalable/apps/spiderman-2099.svg
+Terminal=false
+Type=Application
+Categories=System;Monitor;

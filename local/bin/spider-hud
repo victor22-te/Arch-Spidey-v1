@@ -1,0 +1,310 @@
+#!/usr/bin/env python3
+"""
+SPIDER-MAN 2099 // LYLA TACTICAL CYBER-HUD (Terminal Monitor)
+Interactive futuristic system telemetry & multiverse radar for Arch Linux.
+Controls:
+  [m] Cambiar modo de color (2099 Carmesí/Cian, Miles Morales, Simbionte)
+  [p] Pulso de Telaraña / Escaneo Multiversal
+  [q] Salir del HUD
+"""
+import curses
+import math
+import os
+import time
+
+
+SPIDER_LOGO = [
+    r"      /\             /\      ",
+    r"     /  \   .---.   /  \     ",
+    r"    / /\ \ /     \ / /\ \    ",
+    r"   / /  \ | () () | /  \ \   ",
+    r"  /_/ /\ \ \  ^  / / /\ \_\  ",
+    r"     /  \ \_\___/_/ /  \     ",
+    r"  __/ /\ \ / _ _ \ / /\ \__  ",
+    r" /___/  \ V | | | V /  \___\ ",
+    r"    /  / |  |_|_|  | \  \    ",
+    r"   /__/ / \  | |  / \ \__\   ",
+    r"       /   \ / \ /   \       ",
+    r"       \   /  V  \   /       ",
+    r"        \ /       \ /        ",
+    r"         V         V         ",
+]
+
+
+def read_cpu_times():
+    cores = {}
+    try:
+        with open("/proc/stat", "r") as f:
+            for line in f:
+                if line.startswith("cpu"):
+                    parts = line.split()
+                    name = parts[0]
+                    vals = [int(x) for x in parts[1:]]
+                    idle = vals[3] + (vals[4] if len(vals) > 4 else 0)
+                    total = sum(vals)
+                    cores[name] = (idle, total)
+    except Exception:
+        pass
+    return cores
+
+
+def read_memory():
+    info = {}
+    try:
+        with open("/proc/meminfo", "r") as f:
+            for line in f:
+                parts = line.split(":")
+                if len(parts) == 2:
+                    k = parts[0].strip()
+                    v = int(parts[1].strip().split()[0])
+                    info[k] = v
+    except Exception:
+        pass
+    total = info.get("MemTotal", 1)
+    avail = info.get("MemAvailable", total)
+    used = total - avail
+    swap_total = info.get("SwapTotal", 0)
+    swap_free = info.get("SwapFree", 0)
+    swap_used = swap_total - swap_free
+    return (
+        used / 1048576.0,
+        total / 1048576.0,
+        (used * 100.0) / total,
+        swap_used / 1048576.0,
+        swap_total / 1048576.0,
+    )
+
+
+def read_net_bytes():
+    rx, tx = 0, 0
+    try:
+        with open("/proc/net/dev", "r") as f:
+            for line in f.readlines()[2:]:
+                if ":" in line:
+                    iface, data = line.split(":", 1)
+                    if iface.strip() == "lo":
+                        continue
+                    fields = data.split()
+                    rx += int(fields[0])
+                    tx += int(fields[8])
+    except Exception:
+        pass
+    return rx, tx
+
+
+def read_top_procs(limit=6):
+    procs = []
+    try:
+        for pid in os.listdir("/proc"):
+            if not pid.isdigit():
+                continue
+            try:
+                with open(f"/proc/{pid}/comm", "r") as fc:
+                    comm = fc.read().strip()
+                with open(f"/proc/{pid}/status", "r") as fs:
+                    vm_rss = 0
+                    for line in fs:
+                        if line.startswith("VmRSS:"):
+                            vm_rss = int(line.split()[1]) // 1024
+                            break
+                if vm_rss > 0:
+                    procs.append((vm_rss, int(pid), comm))
+            except Exception:
+                continue
+    except Exception:
+        pass
+    procs.sort(reverse=True)
+    return procs[:limit]
+
+
+def draw_bar(win, y, x, width, pct, color_pair_fill, color_pair_empty):
+    inner = max(4, width - 2)
+    filled = int(round((pct / 100.0) * inner))
+    filled = max(0, min(inner, filled))
+    try:
+        win.addstr(y, x, "[", curses.color_pair(2) | curses.A_BOLD)
+        win.addstr(y, x + 1, "█" * filled, curses.color_pair(color_pair_fill) | curses.A_BOLD)
+        win.addstr(y, x + 1 + filled, "░" * (inner - filled), curses.color_pair(color_pair_empty))
+        win.addstr(y, x + 1 + inner, "]", curses.color_pair(2) | curses.A_BOLD)
+    except curses.error:
+        pass
+
+
+def main(stdscr):
+    curses.curs_set(0)
+    stdscr.nodelay(True)
+    stdscr.timeout(120)
+
+    curses.start_color()
+    curses.use_default_colors()
+
+    modes = [
+        ("SPIDER-MAN 2099 // MIGUEL O'HARA", curses.COLOR_RED, curses.COLOR_CYAN, curses.COLOR_BLUE),
+        ("MILES MORALES // BIO-VENOM GLITCH", curses.COLOR_RED, curses.COLOR_MAGENTA, curses.COLOR_YELLOW),
+        ("SYMBIOTE OVERRIDE // BLACK SUIT", curses.COLOR_WHITE, curses.COLOR_CYAN, curses.COLOR_MAGENTA),
+    ]
+    mode_idx = 0
+
+    def apply_palette(idx):
+        _, c1, c2, c3 = modes[idx]
+        curses.init_pair(1, c1, -1)              # Primary Neon (Crimson)
+        curses.init_pair(2, c2, -1)              # Secondary Holo (Cyan)
+        curses.init_pair(3, c3, -1)              # Deep Accent (Blue)
+        curses.init_pair(4, curses.COLOR_GREEN, -1)
+        curses.init_pair(5, curses.COLOR_YELLOW, -1)
+        curses.init_pair(6, curses.COLOR_WHITE, -1)
+
+    apply_palette(mode_idx)
+
+    prev_cpu = read_cpu_times()
+    prev_rx, prev_tx = read_net_bytes()
+    prev_time = time.time()
+    cpu_pcts = {}
+    rx_rate, tx_rate = 0.0, 0.0
+    procs = read_top_procs()
+    tick = 0
+    pulse_frames = 0
+
+    while True:
+        ch = stdscr.getch()
+        if ch in (ord("q"), ord("Q"), 27):
+            break
+        elif ch in (ord("m"), ord("M")):
+            mode_idx = (mode_idx + 1) % len(modes)
+            apply_palette(mode_idx)
+        elif ch in (ord("p"), ord("P")):
+            pulse_frames = 15
+
+        now = time.time()
+        dt = now - prev_time
+        if dt >= 0.6 or not cpu_pcts:
+            cur_cpu = read_cpu_times()
+            for k, (idle, total) in cur_cpu.items():
+                p_idle, p_total = prev_cpu.get(k, (idle, total))
+                d_total = total - p_total
+                d_idle = idle - p_idle
+                if d_total > 0:
+                    cpu_pcts[k] = max(0.0, min(100.0, ((d_total - d_idle) * 100.0) / d_total))
+                else:
+                    cpu_pcts[k] = 0.0
+            prev_cpu = cur_cpu
+
+            cur_rx, cur_tx = read_net_bytes()
+            if dt > 0:
+                rx_rate = (cur_rx - prev_rx) / (1024.0 * dt)
+                tx_rate = (cur_tx - prev_tx) / (1024.0 * dt)
+            prev_rx, prev_tx = cur_rx, cur_tx
+            prev_time = now
+            procs = read_top_procs(6)
+
+        stdscr.erase()
+        h, w = stdscr.getmaxyx()
+
+        mode_name = modes[mode_idx][0]
+        header = f"╔══ 🕷 ALCHEMAX 2099 // LYLA TACTICAL HUD [{mode_name}] ══╗"
+        try:
+            stdscr.addstr(0, max(0, (w - len(header)) // 2), header[: w - 1], curses.color_pair(1) | curses.A_BOLD)
+        except curses.error:
+            pass
+
+        # Left Column: Animated Spider-Man 2099 Emblem + Radar
+        left_w = 34
+        for idx, line in enumerate(SPIDER_LOGO):
+            y = 2 + idx
+            if y >= h - 4:
+                break
+            col = 1 if (idx + (tick // 3)) % 3 != 0 else 2
+            if pulse_frames > 0:
+                col = 2 if (idx + tick) % 2 == 0 else 1
+            try:
+                stdscr.addstr(y, 2, line, curses.color_pair(col) | curses.A_BOLD)
+            except curses.error:
+                pass
+
+        # Spider-Sense & Multiverse Sync Box under logo
+        total_cpu = cpu_pcts.get("cpu", 0.0)
+        sense_y = 17
+        if sense_y < h - 3:
+            try:
+                stdscr.addstr(sense_y, 2, "┌── SPIDER-SENSE TELEMETRY ──┐", curses.color_pair(2) | curses.A_BOLD)
+                wave = "".join(
+                    "▲" if math.sin((i + tick) * 0.6) > 0.3 else ("▼" if math.sin((i + tick) * 0.6) < -0.3 else "─")
+                    for i in range(26)
+                )
+                sense_color = 1 if (total_cpu > 75 or pulse_frames > 0) else 2
+                stdscr.addstr(sense_y + 1, 2, f"│ {wave} │", curses.color_pair(sense_color) | curses.A_BOLD)
+                status_txt = "ALERTA MULTIVERSAL!" if pulse_frames > 0 else ("CARGA ALTA" if total_cpu > 75 else "SIN ANOMALÍAS (2099)")
+                stdscr.addstr(sense_y + 2, 2, f"│ Estado: {status_txt:<18} │", curses.color_pair(4 if total_cpu <= 75 and pulse_frames == 0 else 1) | curses.A_BOLD)
+                stdscr.addstr(sense_y + 3, 2, f"│ Red RX: {rx_rate:6.1f} KB/s        │", curses.color_pair(6))
+                stdscr.addstr(sense_y + 4, 2, f"│ Red TX: {tx_rate:6.1f} KB/s        │", curses.color_pair(6))
+                stdscr.addstr(sense_y + 5, 2, "└────────────────────────────┘", curses.color_pair(2) | curses.A_BOLD)
+            except curses.error:
+                pass
+
+        # Right Column: CPU Core Matrix, Memory & Top Processes
+        rx_x = left_w + 2
+        rem_w = max(20, w - rx_x - 2)
+
+        try:
+            stdscr.addstr(2, rx_x, "⚡ NÚCLEOS NEURALES (CPU MATRIX)", curses.color_pair(2) | curses.A_BOLD)
+            stdscr.addstr(3, rx_x, f"Carga Global: {total_cpu:5.1f}%", curses.color_pair(1) | curses.A_BOLD)
+            draw_bar(stdscr, 3, rx_x + 22, rem_w - 22, total_cpu, 1, 3)
+
+            core_keys = sorted([k for k in cpu_pcts.keys() if k != "cpu"])
+            cy = 5
+            for i in range(0, min(len(core_keys), 8), 2):
+                if cy >= h - 8:
+                    break
+                k1 = core_keys[i]
+                p1 = cpu_pcts.get(k1, 0.0)
+                col_w = (rem_w // 2) - 1
+                stdscr.addstr(cy, rx_x, f"{k1.upper():<4} {p1:4.0f}%", curses.color_pair(6))
+                draw_bar(stdscr, cy, rx_x + 11, max(8, col_w - 12), p1, 2, 3)
+
+                if i + 1 < len(core_keys):
+                    k2 = core_keys[i + 1]
+                    p2 = cpu_pcts.get(k2, 0.0)
+                    x2 = rx_x + col_w + 1
+                    stdscr.addstr(cy, x2, f"{k2.upper():<4} {p2:4.0f}%", curses.color_pair(6))
+                    draw_bar(stdscr, cy, x2 + 11, max(8, col_w - 12), p2, 2, 3)
+                cy += 1
+
+            # Memory Matrix
+            used_gb, total_gb, mem_pct, sw_used, sw_tot = read_memory()
+            my = cy + 1
+            if my < h - 6:
+                stdscr.addstr(my, rx_x, "󰍛 MATRIZ DE MEMORIA BIOMÉTRICA (RAM)", curses.color_pair(2) | curses.A_BOLD)
+                stdscr.addstr(my + 1, rx_x, f"RAM : {used_gb:4.1f}/{total_gb:4.1f} GiB ({mem_pct:4.1f}%)", curses.color_pair(6))
+                draw_bar(stdscr, my + 1, rx_x + 28, rem_w - 28, mem_pct, 1, 3)
+
+            # Top Processes
+            py = my + 3
+            if py < h - 3:
+                stdscr.addstr(py, rx_x, "🕸 PROCESOS ACTIVOS EN LA RED 2099 (TOP RAM)", curses.color_pair(1) | curses.A_BOLD)
+                stdscr.addstr(py + 1, rx_x, f"{'PID':<8} {'MEM (MB)':<10} {'MÓDULO / PROCESO'}", curses.color_pair(2) | curses.A_BOLD)
+                for idx, (rss, pid, comm) in enumerate(procs):
+                    row_y = py + 2 + idx
+                    if row_y >= h - 2:
+                        break
+                    stdscr.addstr(row_y, rx_x, f"{pid:<8} {rss:<10} {comm[:rem_w - 20]}", curses.color_pair(6))
+        except curses.error:
+            pass
+
+        # Footer Controls
+        footer = " [M] Cambiar Traje/Modo  │  [P] Pulso Spider-Sense  │  [Q] Salir de LYLA HUD "
+        try:
+            stdscr.addstr(h - 1, max(0, (w - len(footer)) // 2), footer[: w - 1], curses.color_pair(2) | curses.A_REVERSE | curses.A_BOLD)
+        except curses.error:
+            pass
+
+        if pulse_frames > 0:
+            pulse_frames -= 1
+        tick += 1
+        stdscr.refresh()
+
+
+if __name__ == "__main__":
+    try:
+        curses.wrapper(main)
+    except KeyboardInterrupt:
+        pass

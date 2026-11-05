@@ -370,7 +370,10 @@ var HanabiRenderer = GObject.registerClass(
       this.adapter = GstPlay.PlaySignalAdapter.new(this.play);
       this.adapter.connect(
         "end-of-stream",
-        (adapter) => adapter.play.seek(0)
+        (adapter) => {
+          adapter.play.seek(0);
+          adapter.play.play();
+        }
       );
       this.adapter.connect(
         "warning",

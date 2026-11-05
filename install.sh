@@ -100,6 +100,7 @@ gsettings set org.gnome.desktop.screensaver picture-uri "file://$TARGET_HOME/Pic
 gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
 
 gsettings set org.gnome.shell disable-user-extensions false
+gsettings set org.gnome.shell disable-extension-version-validation true
 gsettings set org.gnome.shell enabled-extensions "['spider-hud@spiderman.2099', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'burn-my-windows@schneegans.github.com', 'dash-to-dock@micxgx.gmail.com', 'CoverflowAltTab@palatis.blogspot.com', 'hanabi-extension@jeffshee.github.io']"
 gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.user-theme name 'SpiderMan-2099-Cyber' 2>/dev/null || true
 

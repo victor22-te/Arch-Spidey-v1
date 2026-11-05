@@ -56,10 +56,10 @@ function getMethods(obj) {
 }
 
 // src/roundedCornersEffect.ts
+import Clutter from "gi://Clutter";
 import Cogl from "gi://Cogl";
 import GLib from "gi://GLib";
 import GObject from "gi://GObject";
-import Shell from "gi://Shell";
 var logger = new Logger("roundedCorners");
 var LOG_DEBOUNCE_MS = 250;
 var fragmentShaderDeclarations = [
@@ -133,8 +133,15 @@ var fragmentShaderCode = [
   "else if (clip_radius > 0.0)                                              \n",
   "    cogl_color_out *= rounded_rect_coverage (texture_coord);             \n"
 ].join("");
+function getStaticSnippet() {
+  return Cogl.Snippet.new(
+    Cogl.SnippetHook.FRAGMENT,
+    fragmentShaderDeclarations,
+    fragmentShaderCode
+  );
+}
 var RoundedCornersEffect = GObject.registerClass(
-  class RoundedCornersEffect2 extends Shell.GLSLEffect {
+  class RoundedCornersEffect2 extends Clutter.ShaderEffect {
     // Pending debounced log timers, keyed by label.
     logTimeouts = /* @__PURE__ */ new Map();
     // Logs `label: ...args` only once the value stops changing for LOG_DEBOUNCE_MS.
@@ -151,53 +158,31 @@ var RoundedCornersEffect = GObject.registerClass(
         })
       );
     }
-    vfunc_build_pipeline() {
-      this.add_glsl_snippet(
-        Cogl.SnippetHook.FRAGMENT,
-        fragmentShaderDeclarations,
-        fragmentShaderCode,
-        false
-      );
+    vfunc_get_static_snippet() {
+      return getStaticSnippet();
+    }
+    setUniform(name, nComponents, value) {
+      this.set_uniform_float(name, nComponents, value);
     }
     setBounds(bounds) {
       this.debugDebounced("bounds", ...bounds);
-      this.set_uniform_float(
-        this.get_uniform_location("bounds"),
-        4,
-        bounds
-      );
+      this.setUniform("bounds", 4, bounds);
     }
     setClipRadius(clipRadius) {
       this.debugDebounced("clipRadius", clipRadius);
-      this.set_uniform_float(
-        this.get_uniform_location("clip_radius"),
-        1,
-        [clipRadius]
-      );
+      this.setUniform("clip_radius", 1, [clipRadius]);
     }
     setPixelStep(pixelStep) {
       this.debugDebounced("pixelStep", ...pixelStep);
-      this.set_uniform_float(
-        this.get_uniform_location("pixel_step"),
-        2,
-        pixelStep
-      );
+      this.setUniform("pixel_step", 2, pixelStep);
     }
     setBorderStroke(stroke) {
       this.debugDebounced("borderStroke", stroke);
-      this.set_uniform_float(
-        this.get_uniform_location("border_stroke"),
-        1,
-        [stroke]
-      );
+      this.setUniform("border_stroke", 1, [stroke]);
     }
     setBorderColor(color) {
       this.debugDebounced("borderColor", ...color);
-      this.set_uniform_float(
-        this.get_uniform_location("border_color"),
-        4,
-        color
-      );
+      this.setUniform("border_color", 4, color);
     }
   }
 );
@@ -207,7 +192,6 @@ var APPLICATION_ID = "io.github.jeffshee.HanabiRenderer";
 var RENDERER_OBJECT_PATH = `/${APPLICATION_ID.replaceAll(".", "/")}`;
 
 // src/wallpaper.ts
-import Clutter from "gi://Clutter";
 import GLib2 from "gi://GLib";
 import GObject2 from "gi://GObject";
 import St from "gi://St";
@@ -897,7 +881,7 @@ var RendererWrapper = class {
             </interface>
         </node>`;
     const DBusProxy = Gio5.DBusProxy.makeProxyWrapper(interfaceXml);
-    return DBusProxy(Gio5.DBus.session, APPLICATION_ID, RENDERER_OBJECT_PATH);
+    return new DBusProxy(Gio5.DBus.session, APPLICATION_ID, RENDERER_OBJECT_PATH);
   }
   async setPlay() {
     try {
@@ -925,7 +909,7 @@ var UPowerWrapper = class {
     const DBUS_OBJECT_PATH = "/org/freedesktop/UPower/devices/DisplayDevice";
     const interfaceXml = DBusUtil.loadInterfaceXML(DBUS_INTERFACE);
     const DBusProxy = Gio5.DBusProxy.makeProxyWrapper(interfaceXml);
-    return DBusProxy(Gio5.DBus.system, DBUS_BUS_NAME, DBUS_OBJECT_PATH);
+    return new DBusProxy(Gio5.DBus.system, DBUS_BUS_NAME, DBUS_OBJECT_PATH);
   }
   getState() {
     return this.proxy.State ?? 0;
@@ -947,7 +931,7 @@ var DBusWrapper = class {
     const DBUS_OBJECT_PATH = "/org/freedesktop/DBus";
     const interfaceXml = DBusUtil.loadInterfaceXML(DBUS_INTERFACE);
     const DBusProxy = Gio5.DBusProxy.makeProxyWrapper(interfaceXml);
-    return DBusProxy(Gio5.DBus.session, DBUS_BUS_NAME, DBUS_OBJECT_PATH);
+    return new DBusProxy(Gio5.DBus.session, DBUS_BUS_NAME, DBUS_OBJECT_PATH);
   }
   listNames() {
     try {
@@ -969,7 +953,7 @@ var MprisWrapper = class {
     const DBUS_OBJECT_PATH = "/org/mpris/MediaPlayer2";
     const interfaceXml = DBusUtil.loadInterfaceXML(DBUS_INTERFACE);
     const DBusProxy = Gio5.DBusProxy.makeProxyWrapper(interfaceXml);
-    return DBusProxy(Gio5.DBus.session, DBUS_BUS_NAME, DBUS_OBJECT_PATH);
+    return new DBusProxy(Gio5.DBus.session, DBUS_BUS_NAME, DBUS_OBJECT_PATH);
   }
   getPlaybackStatus() {
     return this.proxy.PlaybackStatus ?? "Stopped";

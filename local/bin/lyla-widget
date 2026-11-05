@@ -80,7 +80,7 @@ class LylaHudWindow(Gtk.ApplicationWindow):
 
         # Header
         hdr = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
-        lbl_title = Gtk.Label(label="🕷 ALCHEMAX 2099 // LYLA NEURAL HUD")
+        lbl_title = Gtk.Label(label="󱇪  ALCHEMAX 2099 // LYLA NEURAL HUD")
         lbl_title.add_css_class("lyla-title")
         lbl_title.set_xalign(0.0)
         self.lbl_sub = Gtk.Label(label="OPERADOR: MIGUEL O'HARA • NUEVA YORK 2099 • SYNC OK")
@@ -115,7 +115,7 @@ class LylaHudWindow(Gtk.ApplicationWindow):
         self.lbl_ram.set_xalign(0.0)
         right.append(self.lbl_ram)
 
-        self.lbl_sense = Gtk.Label(label="⚡ SPIDER-SENSE: NOMINAL")
+        self.lbl_sense = Gtk.Label(label="  SPIDER-SENSE: NOMINAL")
         self.lbl_sense.add_css_class("lyla-subtitle")
         self.lbl_sense.set_xalign(0.0)
         right.append(self.lbl_sense)
@@ -124,12 +124,12 @@ class LylaHudWindow(Gtk.ApplicationWindow):
         btn_grid = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         right.append(btn_grid)
 
-        b_term = Gtk.Button(label="🕸  Abrir Cyber-Terminal")
+        b_term = Gtk.Button(label="  Abrir Cyber-Terminal")
         b_term.add_css_class("lyla-btn")
         b_term.connect("clicked", lambda *_: subprocess.Popen(["kitty"]))
         btn_grid.append(b_term)
 
-        b_tui = Gtk.Button(label="⚡  Monitor Táctico LYLA")
+        b_tui = Gtk.Button(label="󰐷  Monitor Táctico LYLA")
         b_tui.add_css_class("lyla-btn")
         b_tui.connect(
             "clicked",
@@ -139,7 +139,7 @@ class LylaHudWindow(Gtk.ApplicationWindow):
         )
         btn_grid.append(b_tui)
 
-        b_wall = Gtk.Button(label="🖼  Alternar Fondo 2099")
+        b_wall = Gtk.Button(label="󰋩  Alternar Fondo 2099")
         b_wall.add_css_class("lyla-btn")
         b_wall.connect("clicked", self.on_switch_wallpaper)
         btn_grid.append(b_wall)
@@ -196,9 +196,9 @@ class LylaHudWindow(Gtk.ApplicationWindow):
         self.lbl_cpu.set_text(f"  CPU NEURAL : {self.cpu_pct:4.1f}%")
         self.lbl_ram.set_text(f"󰍛  RAM MATRIZ : {self.ram_pct:4.1f}% ({self.ram_text})")
         if self.cpu_pct > 75:
-            self.lbl_sense.set_text("⚠ SPIDER-SENSE: ALERTA DE CARGA")
+            self.lbl_sense.set_text("  SPIDER-SENSE: ALERTA DE CARGA")
         else:
-            self.lbl_sense.set_text(f"⚡ SPIDER-SENSE: ACTIVO [{time.strftime('%H:%M:%S')}]")
+            self.lbl_sense.set_text(f"  SPIDER-SENSE: ACTIVO [{time.strftime('%H:%M:%S')}]")
         return True
 
     def on_draw(self, _area, cr, width, height):

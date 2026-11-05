@@ -1,17 +1,17 @@
-# 🕷️ Spider-Man 2099 // LYLA Cyber-HUD Dotfiles (Arch Linux + GNOME)
+# 󱇪 Spider-Man 2099 // LYLA Cyber-HUD Dotfiles (Arch Linux + GNOME)
 
 Suite completa de personalización futurista inspirada en **Spider-Man 2099 (Miguel O'Hara)** y el asistente holográfico **LYLA** para **Arch Linux con GNOME**.
 
 ---
 
-## 📦 ¿Qué incluye este repositorio?
+## 󰏖 ¿Qué incluye este repositorio?
 
 - **`config/kitty/`**: Configuración de **Kitty Terminal** con efecto holográfico (blur/transparencia), estela de cursor neón carmesí (`#ff2a4b`), barra Powerline y paleta *Spider-Man 2099*.
 - **`config/fastfetch/`**: Arte ASCII braille de Spider-Man + paneles de telemetría biométrica **`SPIDER-MAN 2099 // LYLA HUD`**.
-- **`config/starship.toml`**: Prompt futurista con cápsulas `╭─🕸 2099` y reloj `[LYLA // HH:MM:SS]`.
+- **`config/starship.toml`**: Prompt futurista con cápsulas `╭─󰯊 2099` y reloj `[LYLA // HH:MM:SS]`.
 - **`config/gtk-3.0/` y `config/gtk-4.0/`**: Tema completo **SpiderMan-2099-Cyber** para aplicaciones GTK3, GTK4 y Libadwaita.
 - **`local/share/gnome-shell/extensions/spider-hud@spiderman.2099/`**: Extensión nativa para GNOME Shell (45–51) que personaliza:
-  - Barra superior con telemetría en vivo (`🕷 2099 // LYLA [🕸 CPU % | RAM %] ⚡SYNC`)
+  - Barra superior con telemetría en vivo (`󱇪 2099 // LYLA [󰯊 CPU % | RAM %] SYNC`)
   - Centro de Calendario y Notificaciones con bordes neón carmesí y cian
   - Pantalla de bloqueo (aro de avatar neón, entrada de contraseña y reloj)
   - Dock / Dash y vista de actividades
@@ -22,7 +22,7 @@ Suite completa de personalización futurista inspirada en **Spider-Man 2099 (Mig
 
 ---
 
-## 🚀 Cómo instalar en un dispositivo nuevo (o restaurar esta versión)
+##  Cómo instalar en un dispositivo nuevo (o restaurar esta versión)
 
 ```bash
 git clone https://github.com/victor22-te/Arch-Spidey-v1.git
@@ -35,7 +35,7 @@ chmod +x install.sh backup.sh
 
 ---
 
-## ⏪ Cómo regresar a esta versión exacta si haces cambios después
+## 󰕌 Cómo regresar a esta versión exacta si haces cambios después
 
 El estado base estable está guardado bajo el tag **`v1.0-spiderman-2099`**:
 
@@ -47,7 +47,7 @@ git checkout v1.0-spiderman-2099
 
 ---
 
-## 💾 Cómo guardar nuevos cambios antes de hacer `git push`
+## 󰋊 Cómo guardar nuevos cambios antes de hacer `git push`
 
 Puedes ejecutar en cualquier momento:
 
@@ -61,7 +61,7 @@ git push
 
 ---
 
-## ⌨️ Atajos de Teclado Configurados
+##  Atajos de Teclado Configurados
 
 | Acción | Atajo Principal | Atajo Alternativo | Comando CLI |
 | :--- | :--- | :--- | :--- |

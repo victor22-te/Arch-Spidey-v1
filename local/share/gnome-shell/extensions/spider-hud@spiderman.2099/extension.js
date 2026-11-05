@@ -25,19 +25,19 @@ class SpiderHudIndicator extends PanelMenu.Button {
         });
 
         this._badgeLabel = new St.Label({
-            text: '🕷 2099 // LYLA',
+            text: '󱇪 2099 // LYLA',
             y_align: Clutter.ActorAlign.CENTER,
             style_class: 'spider-hud-badge',
         });
 
         this._telemetryLabel = new St.Label({
-            text: '[🕸 CPU --% | RAM --%]',
+            text: '[  CPU --% | 󰍛 RAM --% ]',
             y_align: Clutter.ActorAlign.CENTER,
             style_class: 'spider-hud-telemetry',
         });
 
         this._senseLabel = new St.Label({
-            text: '⚡SYNC',
+            text: ' SYNC',
             y_align: Clutter.ActorAlign.CENTER,
             style_class: 'spider-hud-sense-ok',
         });
@@ -65,7 +65,7 @@ class SpiderHudIndicator extends PanelMenu.Button {
         }
 
         headerBox.add_child(new St.Label({
-            text: '🕸 ALCHEMAX // MIGUEL O’HARA CYBER-HUD v2099',
+            text: '󰯊  ALCHEMAX // MIGUEL O’HARA CYBER-HUD v2099',
             style_class: 'spider-hud-menu-header',
         }));
         headerBox.add_child(new St.Label({
@@ -80,7 +80,7 @@ class SpiderHudIndicator extends PanelMenu.Button {
         // Live detailed telemetry item
         this._detailCpuItem = new PopupMenu.PopupMenuItem('  Núcleo Neural (CPU): Calculando...', {reactive: false});
         this._detailRamItem = new PopupMenu.PopupMenuItem('󰍛  Matriz de Memoria (RAM): Calculando...', {reactive: false});
-        this._detailSenseItem = new PopupMenu.PopupMenuItem('⚡ Spider-Sense: Calibrado (Sin anomalías)', {reactive: false});
+        this._detailSenseItem = new PopupMenu.PopupMenuItem('  Spider-Sense: Calibrado (Sin anomalías)', {reactive: false});
         this.menu.addMenuItem(this._detailCpuItem);
         this.menu.addMenuItem(this._detailRamItem);
         this.menu.addMenuItem(this._detailSenseItem);
@@ -88,19 +88,19 @@ class SpiderHudIndicator extends PanelMenu.Button {
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
         // Quick Launchers
-        const termItem = new PopupMenu.PopupMenuItem('🕸  Abrir Cyber-Terminal (Kitty)');
+        const termItem = new PopupMenu.PopupMenuItem('  Abrir Cyber-Terminal (Kitty)');
         termItem.connect('activate', () => {
             GLib.spawn_command_line_async('kitty');
         });
         this.menu.addMenuItem(termItem);
 
-        const hudTuiItem = new PopupMenu.PopupMenuItem('⚡  Lanzar LYLA Tactical HUD (Monitor Interactivo)');
+        const hudTuiItem = new PopupMenu.PopupMenuItem('󰐷  Lanzar LYLA Tactical HUD (Monitor Interactivo)');
         hudTuiItem.connect('activate', () => {
             GLib.spawn_command_line_async('kitty --title "LYLA // SPIDER-MAN 2099 TACTICAL HUD" -e /home/spider-man/.local/bin/spider-hud');
         });
         this.menu.addMenuItem(hudTuiItem);
 
-        const overviewItem = new PopupMenu.PopupMenuItem('🕷  Vista Táctica de Ventanas (Overview)');
+        const overviewItem = new PopupMenu.PopupMenuItem('󱇪  Vista Táctica de Ventanas (Overview)');
         overviewItem.connect('activate', () => {
             Main.overview.toggle();
         });
@@ -161,16 +161,16 @@ class SpiderHudIndicator extends PanelMenu.Button {
             }
         }
 
-        this._telemetryLabel.set_text(`[🕸 CPU ${cpuPct}% | RAM ${ramPct}%]`);
+        this._telemetryLabel.set_text(`[  CPU ${cpuPct}% | 󰍛 RAM ${ramPct}% ]`);
 
         if (cpuPct > 80 || ramPct > 85) {
-            this._senseLabel.set_text('⚠ ALERTA');
+            this._senseLabel.set_text(' ALERTA');
             this._senseLabel.style_class = 'spider-hud-sense-alert';
-            this._detailSenseItem.label.set_text('⚠ Spider-Sense: ¡ALERTA DE CARGA ALTA DETECTADA!');
+            this._detailSenseItem.label.set_text('  Spider-Sense: ¡ALERTA DE CARGA ALTA DETECTADA!');
         } else {
-            this._senseLabel.set_text('⚡SYNC');
+            this._senseLabel.set_text(' SYNC');
             this._senseLabel.style_class = 'spider-hud-sense-ok';
-            this._detailSenseItem.label.set_text('⚡ Spider-Sense: Nominal (Red 2099 Estable)');
+            this._detailSenseItem.label.set_text('  Spider-Sense: Nominal (Red 2099 Estable)');
         }
 
         this._detailCpuItem.label.set_text(`  Núcleo Neural (CPU): ${cpuPct}% activo`);

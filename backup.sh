@@ -7,7 +7,7 @@ set -e
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo -e "\e[1;36m[🕸] Guardando configuraciones actuales en $REPO_DIR...\e[0m"
+echo -e "\e[1;36m[󰯊] Guardando configuraciones actuales en $REPO_DIR...\e[0m"
 
 cp -r ~/.config/kitty/* "$REPO_DIR/config/kitty/"
 cp -r ~/.config/fastfetch/* "$REPO_DIR/config/fastfetch/"
@@ -43,4 +43,4 @@ dconf dump /org/gnome/settings-daemon/plugins/media-keys/ > "$REPO_DIR/gnome/med
 
 cd "$REPO_DIR"
 git status -s
-echo -e "\e[1;32m[✔] Respaldo actualizado en $REPO_DIR.\e[0m"
+echo -e "\e[1;32m[] Respaldo actualizado en $REPO_DIR.\e[0m"

@@ -1,9 +1,16 @@
 [/]
-app-picker-layout=[{'org.gnome.Contacts.desktop': <{'position': <0>}>, 'org.gnome.Weather.desktop': <{'position': <1>}>, 'org.gnome.clocks.desktop': <{'position': <2>}>, 'org.gnome.Maps.desktop': <{'position': <3>}>, 'org.gnome.Music.desktop': <{'position': <4>}>, 'org.gnome.SimpleScan.desktop': <{'position': <5>}>, 'lstopo.desktop': <{'position': <6>}>, 'org.gnome.Snapshot.desktop': <{'position': <7>}>, 'org.gnome.Characters.desktop': <{'position': <8>}>, 'Utilities': <{'position': <9>}>, 'System': <{'position': <10>}>, 'org.gnome.Console.desktop': <{'position': <11>}>, 'qv4l2.desktop': <{'position': <12>}>, 'org.gnome.Tour.desktop': <{'position': <13>}>, 'google-chrome.desktop': <{'position': <14>}>, 'org.gnome.Yelp.desktop': <{'position': <15>}>, 'qvidcap.desktop': <{'position': <16>}>, 'org.gnome.Calculator.desktop': <{'position': <17>}>, 'org.gnome.Calendar.desktop': <{'position': <18>}>, 'org.gnome.TextEditor.desktop': <{'position': <19>}>, 'org.gnome.Software.desktop': <{'position': <20>}>, 'org.gnome.Epiphany.desktop': <{'position': <21>}>, 'btop.desktop': <{'position': <22>}>, 'lyla-widget.desktop': <{'position': <23>}>}, {'spider-hud.desktop': <{'position': <0>}>}]
+app-picker-layout=[{'org.gnome.Contacts.desktop': <{'position': <0>}>, 'org.gnome.Weather.desktop': <{'position': <1>}>, 'org.gnome.clocks.desktop': <{'position': <2>}>, 'org.gnome.Maps.desktop': <{'position': <3>}>, 'org.gnome.Music.desktop': <{'position': <4>}>, 'org.gnome.SimpleScan.desktop': <{'position': <5>}>, 'lstopo.desktop': <{'position': <6>}>, 'org.gnome.Snapshot.desktop': <{'position': <7>}>, 'org.gnome.Characters.desktop': <{'position': <8>}>, 'Utilities': <{'position': <9>}>, 'System': <{'position': <10>}>, 'org.gnome.Console.desktop': <{'position': <11>}>, 'qv4l2.desktop': <{'position': <12>}>, 'org.gnome.Tour.desktop': <{'position': <13>}>, 'org.gnome.Yelp.desktop': <{'position': <14>}>, 'qvidcap.desktop': <{'position': <15>}>, 'org.gnome.Calculator.desktop': <{'position': <16>}>, 'org.gnome.Calendar.desktop': <{'position': <17>}>, 'org.gnome.TextEditor.desktop': <{'position': <18>}>, 'org.gnome.Software.desktop': <{'position': <19>}>, 'btop.desktop': <{'position': <20>}>}, {'antigravity-ide.desktop': <{'position': <0>}>, 'com.microsoft.VSCode.desktop': <{'position': <1>}>, 'brave-browser.desktop': <{'position': <2>}>, 'google-chrome.desktop': <{'position': <3>}>, 'com.rtosta.zapzap.desktop': <{'position': <4>}>}]
 disable-user-extensions=false
-enabled-extensions=['spider-hud@spiderman.2099']
-favorite-apps=['kitty.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Settings.desktop', 'com.rtosta.zapzap.desktop', 'brave-browser.desktop']
+disabled-extensions=@as []
+enabled-extensions=['spider-hud@spiderman.2099', 'user-theme@gnome-shell-extensions.gcampax.github.com']
+favorite-apps=['kitty.desktop', 'lyla-widget.desktop', 'spider-hud.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Epiphany.desktop', 'org.gnome.Settings.desktop']
 welcome-dialog-last-shown-version='51.1'
+
+[extensions/user-theme]
+name='SpiderMan-2099-Cyber'
 
 [keybindings]
 toggle-quick-settings=['<Super><Shift>s']
+
+[world-clocks]
+locations=[<(uint32 2, <('Geneva', 'LSGG', true, [(0.80721477904737737, 0.10704685497122136)], [(0.80634211442138026, 0.10762864302408116)])>)>]

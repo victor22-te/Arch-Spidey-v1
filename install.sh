@@ -10,7 +10,7 @@ TARGET_USER="$(whoami)"
 TARGET_HOME="$HOME"
 
 echo -e "\e[1;31m╔══════════════════════════════════════════════════════════════╗\e[0m"
-echo -e "\e[1;31m║  🕷  INSTALADOR SPIDER-MAN 2099 // LYLA CYBER-HUD (ARCH OS)   ║\e[0m"
+echo -e "\e[1;31m║  󱇪  INSTALADOR SPIDER-MAN 2099 // LYLA CYBER-HUD (ARCH OS)   ║\e[0m"
 echo -e "\e[1;31m╚══════════════════════════════════════════════════════════════╝\e[0m"
 
 # 1. Instalar paquetes base necesarios si estamos en Arch Linux y faltan
@@ -22,12 +22,12 @@ for pkg in kitty fastfetch starship ttf-jetbrains-mono-nerd librsvg imagemagick 
 done
 
 if [ "${#NEEDED_PKGS[@]}" -gt 0 ]; then
-    echo -e "\e[1;36m[⚡] Instalando paquetes necesarios con pacman: ${NEEDED_PKGS[*]}...\e[0m"
+    echo -e "\e[1;36m[] Instalando paquetes necesarios con pacman: ${NEEDED_PKGS[*]}...\e[0m"
     sudo pacman -S --needed --noconfirm "${NEEDED_PKGS[@]}" || true
 fi
 
 # 2. Crear directorios destino
-echo -e "\e[1;36m[🕸] Creando estructura de directorios en $TARGET_HOME...\e[0m"
+echo -e "\e[1;36m[󰯊] Creando estructura de directorios en $TARGET_HOME...\e[0m"
 mkdir -p "$TARGET_HOME/.config"/{kitty,fastfetch,gtk-3.0,gtk-4.0,autostart}
 mkdir -p "$TARGET_HOME/.local/bin"
 mkdir -p "$TARGET_HOME/.local/share"/{applications,icons/hicolor/scalable/apps,gnome-shell/extensions,themes}
@@ -35,7 +35,7 @@ mkdir -p "$TARGET_HOME/.themes"
 mkdir -p "$TARGET_HOME/Pictures" "$TARGET_HOME/Imágenes"
 
 # 3. Copiar configuraciones de ~/.config
-echo -e "\e[1;36m[🕸] Restaurando Kitty, Fastfetch, Starship y temas GTK3/GTK4...\e[0m"
+echo -e "\e[1;36m[󰯊] Restaurando Kitty, Fastfetch, Starship y temas GTK3/GTK4...\e[0m"
 cp -r "$REPO_DIR/config/kitty/"* "$TARGET_HOME/.config/kitty/"
 cp -r "$REPO_DIR/config/fastfetch/"* "$TARGET_HOME/.config/fastfetch/"
 cp "$REPO_DIR/config/starship.toml" "$TARGET_HOME/.config/starship.toml"
@@ -49,7 +49,7 @@ cp "$REPO_DIR/home/.face" "$TARGET_HOME/.face"
 chmod 644 "$TARGET_HOME/.face"
 
 # 5. Copiar scripts, iconos, lanzadores, extensión GNOME y tema completo
-echo -e "\e[1;36m[🕸] Instalando scripts LYLA HUD, extensión GNOME y tema SpiderMan-2099-Cyber...\e[0m"
+echo -e "\e[1;36m[󰯊] Instalando scripts LYLA HUD, extensión GNOME y tema SpiderMan-2099-Cyber...\e[0m"
 cp "$REPO_DIR/local/bin/spider-hud" "$TARGET_HOME/.local/bin/"
 cp "$REPO_DIR/local/bin/lyla-widget" "$TARGET_HOME/.local/bin/"
 chmod +x "$TARGET_HOME/.local/bin/spider-hud" "$TARGET_HOME/.local/bin/lyla-widget"
@@ -64,14 +64,14 @@ cp -r "$REPO_DIR/local/share/themes/SpiderMan-2099-Cyber" "$TARGET_HOME/.local/s
 cp -r "$REPO_DIR/local/share/themes/SpiderMan-2099-Cyber" "$TARGET_HOME/.themes/"
 
 # 6. Copiar Wallpapers y Avatar
-echo -e "\e[1;36m[🕸] Copiando fondos de pantalla y avatar Spider-Man 2099...\e[0m"
+echo -e "\e[1;36m[󰯊] Copiando fondos de pantalla y avatar Spider-Man 2099...\e[0m"
 cp "$REPO_DIR/wallpapers/"* "$TARGET_HOME/Pictures/"
 cp "$REPO_DIR/wallpapers/spiderman_2099_cyber.jpg" "$TARGET_HOME/Pictures/spiderman_cyberpunk.jpg"
 cp "$REPO_DIR/wallpapers/spiderman_2099_cyber.jpg" "$TARGET_HOME/Imágenes/spiderman_2099_cyber.jpg" 2>/dev/null || true
 
 # 7. Adaptar rutas si el usuario en el nuevo dispositivo no se llama 'spider-man'
 if [ "$TARGET_HOME" != "/home/spider-man" ]; then
-    echo -e "\e[1;33m[⚡] Adaptando rutas de /home/spider-man a $TARGET_HOME...\e[0m"
+    echo -e "\e[1;33m[] Adaptando rutas de /home/spider-man a $TARGET_HOME...\e[0m"
     sed -i "s|/home/spider-man|$TARGET_HOME|g" \
         "$TARGET_HOME/.bashrc" \
         "$TARGET_HOME/.config/kitty/kitty.conf" \
@@ -83,7 +83,7 @@ if [ "$TARGET_HOME" != "/home/spider-man" ]; then
 fi
 
 # 8. Aplicar configuraciones de GNOME (gsettings / dconf) y Avatar AccountsService
-echo -e "\e[1;36m[🕸] Aplicando configuraciones de GNOME, fondos y atajos de teclado...\e[0m"
+echo -e "\e[1;36m[󰯊] Aplicando configuraciones de GNOME, fondos y atajos de teclado...\e[0m"
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface gtk-theme 'SpiderMan-2099-Cyber'
 gsettings set org.gnome.desktop.interface accent-color 'red' 2>/dev/null || true
@@ -139,5 +139,5 @@ if [ -n "$USER_OBJ" ]; then
     gdbus call --system --dest org.freedesktop.Accounts --object-path "$USER_OBJ" --method org.freedesktop.Accounts.User.SetIconFile "$TARGET_HOME/Pictures/spiderman_2099_avatar.png" >/dev/null 2>&1 || true
 fi
 
-echo -e "\e[1;32m[✔] ¡Instalación Spider-Man 2099 // LYLA Cyber-HUD completada con éxito!\e[0m"
+echo -e "\e[1;32m[] ¡Instalación Spider-Man 2099 // LYLA Cyber-HUD completada con éxito!\e[0m"
 echo -e "\e[1;36m    Cierra sesión y vuelve a entrar para que GNOME Shell cargue la extensión de barra superior y calendario.\e[0m"

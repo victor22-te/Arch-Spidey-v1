@@ -100,8 +100,16 @@ gsettings set org.gnome.desktop.screensaver picture-uri "file://$TARGET_HOME/Pic
 gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
 
 gsettings set org.gnome.shell disable-user-extensions false
-gsettings set org.gnome.shell enabled-extensions "['spider-hud@spiderman.2099', 'user-theme@gnome-shell-extensions.gcampax.github.com']"
+gsettings set org.gnome.shell enabled-extensions "['spider-hud@spiderman.2099', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'burn-my-windows@schneegans.github.com', 'dash-to-dock@micxgx.gmail.com', 'CoverflowAltTab@palatis.blogspot.com', 'hanabi-extension@jeffshee.github.io']"
 gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.user-theme name 'SpiderMan-2099-Cyber' 2>/dev/null || true
+
+# Configuración Hanabi Live Wallpaper
+dconf write /io/github/jeffshee/hanabi-extension/video-path "'$TARGET_HOME/Pictures/spiderman_2099_live.mp4'"
+dconf write /io/github/jeffshee/hanabi-extension/content-fit 1
+dconf write /io/github/jeffshee/hanabi-extension/mute true
+dconf write /io/github/jeffshee/hanabi-extension/pause-on-battery 1
+dconf write /io/github/jeffshee/hanabi-extension/pause-on-maximize-or-fullscreen 1
+dconf write /io/github/jeffshee/hanabi-extension/random-start-position true
 gsettings set org.gnome.shell favorite-apps "['kitty.desktop', 'lyla-widget.desktop', 'spider-hud.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Epiphany.desktop', 'org.gnome.Settings.desktop']"
 
 # Atajos de teclado

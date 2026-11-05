@@ -282,19 +282,25 @@
 }
 
 /* --- 4. LOCK SCREEN / UNLOCK DIALOG (SPIDER-MAN 2099 BIOMETRIC AUTH) --- */
+.unlock-dialog-clock {
+    spacing: 1.2em !important;
+}
+
 .unlock-dialog-clock .unlock-dialog-clock-time {
     color: #f1f5f9 !important;
     font-family: "JetBrainsMono Nerd Font", monospace !important;
-    font-weight: 300 !important;
-    letter-spacing: 3px;
+    font-size: 5.2em !important;
+    font-weight: 400 !important;
+    padding: 0 20px !important;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85) !important;
 }
 
 .unlock-dialog-clock .unlock-dialog-clock-date {
     color: #94a3b8 !important;
     font-family: "JetBrainsMono Nerd Font", monospace !important;
+    font-size: 1.4em !important;
     font-weight: 600 !important;
-    letter-spacing: 1.5px;
+    padding: 0 16px !important;
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.80) !important;
 }
 

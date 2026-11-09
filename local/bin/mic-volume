@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# SPIDER-MAN 2099 // CONTROL DE VOLUMEN DE MICRÓFONO CON NOTIFICACIÓN OSD
+# Permite subir, bajar y mutear el micrófono por encima del 100% (hasta 150%)
+# ==============================================================================
+
+STEP="${2:-5}"
+MAX_VOL=150
+MIN_VOL=0
+
+# Obtener volumen actual (%)
+CURRENT_VOL=$(pactl get-source-volume @DEFAULT_SOURCE@ 2>/dev/null | grep -Po '\d+(?=%)' | head -n1)
+CURRENT_VOL=${CURRENT_VOL:-80}
+
+ACTION="$1"
+
+case "$ACTION" in
+    up)
+        # Desmutear si estaba silenciado
+        pactl set-source-mute @DEFAULT_SOURCE@ 0 2>/dev/null || true
+        NEW_VOL=$((CURRENT_VOL + STEP))
+        [ "$NEW_VOL" -gt "$MAX_VOL" ] && NEW_VOL=$MAX_VOL
+        pactl set-source-volume @DEFAULT_SOURCE@ "${NEW_VOL}%"
+        notify-send -t 1000 -h string:x-canonical-private-synchronous:mic_osd -h int:value:"$NEW_VOL" -i audio-input-microphone-symbolic "Micrófono: ${NEW_VOL}%" "Ajuste Spider-HUD"
+        ;;
+    down)
+        NEW_VOL=$((CURRENT_VOL - STEP))
+        [ "$NEW_VOL" -lt "$MIN_VOL" ] && NEW_VOL=$MIN_VOL
+        pactl set-source-volume @DEFAULT_SOURCE@ "${NEW_VOL}%"
+        notify-send -t 1000 -h string:x-canonical-private-synchronous:mic_osd -h int:value:"$NEW_VOL" -i audio-input-microphone-symbolic "Micrófono: ${NEW_VOL}%" "Ajuste Spider-HUD"
+        ;;
+    mute|toggle)
+        pactl set-source-mute @DEFAULT_SOURCE@ toggle 2>/dev/null || true
+        IS_MUTED=$(pactl get-source-mute @DEFAULT_SOURCE@ 2>/dev/null | grep -i "yes")
+        if [ -n "$IS_MUTED" ]; then
+            notify-send -t 1000 -h string:x-canonical-private-synchronous:mic_osd -h int:value:0 -i audio-input-microphone-muted-symbolic "Micrófono: SILENCIADO" "Mute activado"
+        else
+            notify-send -t 1000 -h string:x-canonical-private-synchronous:mic_osd -h int:value:"$CURRENT_VOL" -i audio-input-microphone-symbolic "Micrófono: ${CURRENT_VOL}%" "Mute desactivado"
+        fi
+        ;;
+    set)
+        NEW_VOL="${2:-100}"
+        [ "$NEW_VOL" -gt "$MAX_VOL" ] && NEW_VOL=$MAX_VOL
+        [ "$NEW_VOL" -lt "$MIN_VOL" ] && NEW_VOL=$MIN_VOL
+        pactl set-source-volume @DEFAULT_SOURCE@ "${NEW_VOL}%"
+        notify-send -t 1000 -h string:x-canonical-private-synchronous:mic_osd -h int:value:"$NEW_VOL" -i audio-input-microphone-symbolic "Micrófono: ${NEW_VOL}%" "Ajuste Spider-HUD"
+        ;;
+    get)
+        echo "$CURRENT_VOL"
+        ;;
+    *)
+        echo "Uso: $0 {up [paso]|down [paso]|mute|set <porcentaje>|get}"
+        exit 1
+        ;;
+esac

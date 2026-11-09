@@ -72,6 +72,8 @@ git push origin main
 | Abrir **Cyber-Terminal (Kitty)** | `Super + Enter` | `Ctrl + Alt + T` | `kitty` |
 | Abrir **Monitor Táctico LYLA (TUI)** | `Super + S` | `Ctrl + Alt + S` | `lyla` / `hud` |
 | Abrir **Widget Holográfico LYLA 2099** | `Super + H` | — | `lyla-deck` |
+| Subir volumen de **Micrófono** (+5%) | `Super + U` | — | `mic-volume up` |
+| Bajar volumen de **Micrófono** (-5%) | `Super + D` | — | `mic-volume down` |
 | Conmutador de Ventanas 3D | `Alt + Tab` | — | — |
 | Minimizar ventana activa | `Super + Flecha Abajo` | — | — |
 | Panel de Control / Ajustes rápidos | `Super + Shift + S` | — | — |

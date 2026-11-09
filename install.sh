@@ -56,7 +56,8 @@ chmod 644 "$TARGET_HOME/.face"
 echo -e "\e[1;36m[󰯊] Instalando scripts LYLA HUD, extensión GNOME y tema SpiderMan-2099-Cyber...\e[0m"
 cp "$REPO_DIR/local/bin/spider-hud" "$TARGET_HOME/.local/bin/"
 cp "$REPO_DIR/local/bin/lyla-widget" "$TARGET_HOME/.local/bin/"
-chmod +x "$TARGET_HOME/.local/bin/spider-hud" "$TARGET_HOME/.local/bin/lyla-widget"
+cp "$REPO_DIR/local/bin/mic-volume" "$TARGET_HOME/.local/bin/"
+chmod +x "$TARGET_HOME/.local/bin/spider-hud" "$TARGET_HOME/.local/bin/lyla-widget" "$TARGET_HOME/.local/bin/mic-volume"
 
 cp "$REPO_DIR/local/share/applications/"*.desktop "$TARGET_HOME/.local/share/applications/"
 cp "$REPO_DIR/local/share/icons/hicolor/scalable/apps/spiderman-2099.svg" "$TARGET_HOME/.local/share/icons/hicolor/scalable/apps/"
@@ -115,6 +116,7 @@ gsettings set org.gnome.desktop.interface show-battery-percentage true
 gsettings set org.gnome.desktop.interface clock-show-seconds true
 gsettings set org.gnome.desktop.interface clock-show-weekday true
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
+gsettings set org.gnome.desktop.sound allow-volume-above-100-percent true
 
 gsettings set org.gnome.desktop.background picture-uri "file://$TARGET_HOME/Pictures/spiderman_2099_cyber.jpg"
 gsettings set org.gnome.desktop.background picture-uri-dark "file://$TARGET_HOME/Pictures/spiderman_2099_cyber.jpg"
@@ -188,7 +190,15 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:${K
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:${KEY_PATH}/spider4/ command "/usr/bin/kitty --title \"LYLA // SPIDER-MAN 2099 TACTICAL HUD\" -e $TARGET_HOME/.local/bin/spider-hud"
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:${KEY_PATH}/spider4/ binding '<Control><Alt>s'
 
-gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['${KEY_PATH}/spider0/', '${KEY_PATH}/spider1/', '${KEY_PATH}/spider2/', '${KEY_PATH}/spider3/', '${KEY_PATH}/spider4/']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:${KEY_PATH}/spider5/ name 'Subir Volumen Micrófono (Win+U)'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:${KEY_PATH}/spider5/ command "$TARGET_HOME/.local/bin/mic-volume up 5"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:${KEY_PATH}/spider5/ binding '<Super>u'
+
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:${KEY_PATH}/spider6/ name 'Bajar Volumen Micrófono (Win+D)'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:${KEY_PATH}/spider6/ command "$TARGET_HOME/.local/bin/mic-volume down 5"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:${KEY_PATH}/spider6/ binding '<Super>d'
+
+gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['${KEY_PATH}/spider0/', '${KEY_PATH}/spider1/', '${KEY_PATH}/spider2/', '${KEY_PATH}/spider3/', '${KEY_PATH}/spider4/', '${KEY_PATH}/spider5/', '${KEY_PATH}/spider6/']"
 
 # Avatar en AccountsService (Pantalla de bloqueo y login)
 chmod o+x "$TARGET_HOME" "$TARGET_HOME/Pictures" 2>/dev/null || true

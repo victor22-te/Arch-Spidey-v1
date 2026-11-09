@@ -23,6 +23,7 @@ cp ~/.face "$REPO_DIR/home/.face"
 
 cp ~/.local/bin/spider-hud "$REPO_DIR/local/bin/"
 cp ~/.local/bin/lyla-widget "$REPO_DIR/local/bin/"
+cp ~/.local/bin/mic-volume "$REPO_DIR/local/bin/" 2>/dev/null || true
 cp ~/.local/share/applications/lyla-widget.desktop "$REPO_DIR/local/share/applications/"
 cp ~/.local/share/applications/spider-hud.desktop "$REPO_DIR/local/share/applications/"
 cp ~/.local/share/icons/hicolor/scalable/apps/spiderman-2099.svg "$REPO_DIR/local/share/icons/hicolor/scalable/apps/"

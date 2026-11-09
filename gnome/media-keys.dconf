@@ -1,5 +1,5 @@
 [/]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider4/']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider4/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider5/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spider6/']
 
 [custom-keybindings/spider0]
 binding='<Super>Return'
@@ -25,3 +25,13 @@ name='Cyber-Terminal (Ctrl+Alt+T)'
 binding='<Control><Alt>s'
 command='/usr/bin/kitty --title "LYLA // SPIDER-MAN 2099 TACTICAL HUD" -e /home/spider-man/.local/bin/spider-hud'
 name='LYLA Tactical Monitor (Ctrl+Alt+S)'
+
+[custom-keybindings/spider5]
+binding='<Super>u'
+command='/home/spider-man/.local/bin/mic-volume up 5'
+name='Subir Volumen Micrófono (Win+U)'
+
+[custom-keybindings/spider6]
+binding='<Super>d'
+command='/home/spider-man/.local/bin/mic-volume down 5'
+name='Bajar Volumen Micrófono (Win+D)'

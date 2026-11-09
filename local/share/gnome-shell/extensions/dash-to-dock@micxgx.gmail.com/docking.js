@@ -27,6 +27,7 @@ import {
 } from './dependencies/shell/misc.js';
 
 import {
+    AppIcons,
     AppIconsDecorator,
     AppSpread,
     DockDash,
@@ -776,6 +777,108 @@ const DockedDash = GObject.registerClass({
         this.updateDashVisibility();
     }
 
+    _isPointerOverDock() {
+        if (this._menuOpened)
+            return true;
+        if (this._box?.hover || this.hover)
+            return true;
+
+        const activeIcon = AppIcons.getActivePreviewIcon?.();
+        if (activeIcon?._previewMenu?.isOpen) {
+            if (activeIcon._previewMenu.actor?.hover)
+                return true;
+            try {
+                const [mx, my] = global.get_pointer();
+                const [px, py] = activeIcon._previewMenu.actor.get_transformed_position();
+                const [pw, ph] = activeIcon._previewMenu.actor.get_transformed_size();
+                if (mx >= px && mx <= px + pw && my >= py && my <= py + ph)
+                    return true;
+            } catch (e) {}
+        }
+
+        const monitor = this._monitor;
+        if (!monitor)
+            return false;
+
+        const [x, y] = global.get_pointer();
+        if (x < monitor.x || x > monitor.x + monitor.width ||
+            y < monitor.y || y > monitor.y + monitor.height)
+            return false;
+
+        switch (this._position) {
+        case St.Side.BOTTOM: {
+            const dockHeight = Math.max(this._box?.height || 0, this.height || 0, 50);
+            const dockTop = monitor.y + monitor.height - dockHeight;
+            if (y >= dockTop - 25 && y <= monitor.y + monitor.height) {
+                if (DockManager.settings.extendHeight)
+                    return true;
+                if (this._box?.get_transformed_position) {
+                    const [boxX] = this._box.get_transformed_position();
+                    const boxW = this._box.width;
+                    if (boxW > 0 && boxX !== undefined) {
+                        return (x >= boxX - 40 && x <= boxX + boxW + 40);
+                    }
+                }
+                return true;
+            }
+            break;
+        }
+        case St.Side.TOP: {
+            const dockHeight = Math.max(this._box?.height || 0, this.height || 0, 50);
+            const dockBottom = monitor.y + dockHeight;
+            if (y >= monitor.y && y <= dockBottom + 25) {
+                if (DockManager.settings.extendHeight)
+                    return true;
+                if (this._box?.get_transformed_position) {
+                    const [boxX] = this._box.get_transformed_position();
+                    const boxW = this._box.width;
+                    if (boxW > 0 && boxX !== undefined) {
+                        return (x >= boxX - 40 && x <= boxX + boxW + 40);
+                    }
+                }
+                return true;
+            }
+            break;
+        }
+        case St.Side.LEFT: {
+            const dockWidth = Math.max(this._box?.width || 0, this.width || 0, 50);
+            const dockRight = monitor.x + dockWidth;
+            if (x >= monitor.x && x <= dockRight + 25) {
+                if (DockManager.settings.extendHeight)
+                    return true;
+                if (this._box?.get_transformed_position) {
+                    const [, boxY] = this._box.get_transformed_position();
+                    const boxH = this._box.height;
+                    if (boxH > 0 && boxY !== undefined) {
+                        return (y >= boxY - 40 && y <= boxY + boxH + 40);
+                    }
+                }
+                return true;
+            }
+            break;
+        }
+        case St.Side.RIGHT: {
+            const dockWidth = Math.max(this._box?.width || 0, this.width || 0, 50);
+            const dockLeft = monitor.x + monitor.width - dockWidth;
+            if (x >= dockLeft - 25 && x <= monitor.x + monitor.width) {
+                if (DockManager.settings.extendHeight)
+                    return true;
+                if (this._box?.get_transformed_position) {
+                    const [, boxY] = this._box.get_transformed_position();
+                    const boxH = this._box.height;
+                    if (boxH > 0 && boxY !== undefined) {
+                        return (y >= boxY - 40 && y <= boxY + boxH + 40);
+                    }
+                }
+                return true;
+            }
+            break;
+        }
+        }
+
+        return false;
+    }
+
     /**
      * Show/hide dash based on, in order of priority:
      * overview visibility
@@ -806,9 +909,9 @@ const DockedDash = GObject.registerClass({
         } else if (this.intellihideEnabled) {
             if (!this.dash.requiresVisibility && this._intellihide.getOverlapStatus()) {
                 this._ignoreHover = false;
-                // Do not hide if autohide is enabled and mouse is hover
-                if (!this._box.hover || !this.autohideEnabled)
-                    this._animateOut(settings.animationTime, 0);
+                // Do not hide if autohide is enabled and pointer is over dock or preview
+                if (!this._isPointerOverDock() || !this.autohideEnabled)
+                    this.hideDock();
             } else {
                 this._ignoreHover = true;
                 this._removeAnimations();
@@ -817,12 +920,12 @@ const DockedDash = GObject.registerClass({
         } else if (this.autohideEnabled) {
             this._ignoreHover = false;
 
-            if (this._box.hover || this.dash.requiresVisibility)
+            if (this._isPointerOverDock() || this.dash.requiresVisibility)
                 this._animateIn(settings.animationTime, 0);
             else
-                this._animateOut(settings.animationTime, 0);
+                this.hideDock();
         } else {
-            this._animateOut(settings.animationTime, 0);
+            this.hideDock();
         }
     }
 
@@ -862,7 +965,7 @@ const DockedDash = GObject.registerClass({
             // Skip if dock is not in autohide mode for instance because it is shown
             // by intellihide.
             if (this.autohideEnabled) {
-                if (this._box.hover || Main.overview.visible)
+                if (this._isPointerOverDock() || Main.overview.visible)
                     this.showDock();
                 else
                     this.hideDock();
@@ -918,6 +1021,10 @@ const DockedDash = GObject.registerClass({
             mode: Clutter.AnimationMode.EASE_OUT_QUAD,
             onComplete: () => {
                 this.dockState = State.SHOWN;
+                // If cursor is still over dock or preview, cancel delayed hide
+                if (this._isPointerOverDock())
+                    this._delayedHide = false;
+
                 // Remove barrier so that mouse pointer is released and can
                 // monitors on other side of dock.
                 // NOTE: Delay needed to keep mouse from moving past dock and
@@ -967,11 +1074,9 @@ const DockedDash = GObject.registerClass({
      * Dwelling system based on the GNOME Shell 3.14 messageTray code.
      */
     _setupDockDwellIfNeeded() {
-        // If we don't have extended barrier features, then we need
-        // to support the old tray dwelling mechanism.
-        if (this.autohideEnabled &&
-            (!Utils.supportsExtendedBarriers() ||
-             !DockManager.settings.requirePressureToShow)) {
+        // Support dwelling mechanism whenever autohide is enabled to guarantee reliable
+        // reveal on Wayland edge hover.
+        if (this.autohideEnabled) {
             this._dockWatch = Utils.getCursorTracker().connect(
                 'position-invalidated',
                 () => this._checkDockDwellLater(...global.get_pointer()));
@@ -1007,17 +1112,14 @@ const DockedDash = GObject.registerClass({
             shouldDwell = (y === this._monitor.y) && (x > workArea.x) &&
                 (x < workArea.x + workArea.width);
         } else if (this._position === St.Side.BOTTOM) {
-            shouldDwell = (y === this._monitor.y + this._monitor.height - 1) &&
-                (x > workArea.x) && (x < workArea.x + workArea.width);
+            shouldDwell = (y >= this._monitor.y + this._monitor.height - 2) &&
+                (x >= workArea.x) && (x <= workArea.x + workArea.width);
         }
 
         if (shouldDwell) {
             // We only set up dwell timeout when the user is not hovering over the dock
-            // already (!this._box.hover).
-            // The _dockDwelling variable is used so that we only try to
-            // fire off one dock dwell - if it fails (because, say, the user has the mouse down),
-            // we don't try again until the user moves the mouse up and down again.
-            if (!this._dockDwelling && !this._box.hover && (this._dockDwellTimeoutId === 0)) {
+            // already (!this._isPointerOverDock()).
+            if (!this._dockDwelling && !this._isPointerOverDock() && (this._dockDwellTimeoutId === 0)) {
                 // Save the interaction timestamp so we can detect user input
                 const focusWindow = global.display.focus_window;
                 this._dockDwellUserTime = focusWindow ? focusWindow.user_time : 0;
@@ -1121,51 +1223,15 @@ const DockedDash = GObject.registerClass({
         if (this._triggerTimeoutId)
             GLib.source_remove(this._triggerTimeoutId);
 
-        // In case the mouse move away from the dock area before hovering it,
-        // in such case the leave event would never be triggered and the dock
-        // would stay visible forever.
-        this._triggerTimeoutId =  GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
-            const [x, y, mods_] = global.get_pointer();
-            let shouldHide = true;
-            switch (this._position) {
-            case St.Side.LEFT:
-                if (x <= this._staticBox.x2 &&
-                    x >= this._monitor.x &&
-                    y >= this._monitor.y &&
-                    y <= this._monitor.y + this._monitor.height)
-                    shouldHide = false;
-
-                break;
-            case St.Side.RIGHT:
-                if (x >= this._staticBox.x1 &&
-                    x <= this._monitor.x + this._monitor.width &&
-                    y >= this._monitor.y &&
-                    y <= this._monitor.y + this._monitor.height)
-                    shouldHide = false;
-
-                break;
-            case St.Side.TOP:
-                if (x >= this._monitor.x &&
-                    x <= this._monitor.x + this._monitor.width &&
-                    y <= this._staticBox.y2 &&
-                    y >= this._monitor.y)
-                    shouldHide = false;
-
-                break;
-            case St.Side.BOTTOM:
-                if (x >= this._monitor.x &&
-                    x <= this._monitor.x + this._monitor.width &&
-                    y >= this._staticBox.y1 &&
-                    y <= this._monitor.y + this._monitor.height)
-                    shouldHide = false;
-            }
-            if (shouldHide) {
-                this._triggerTimeoutId = 0;
-                this._hoverChanged();
-                return GLib.SOURCE_REMOVE;
-            } else {
+        // Keep dock open while pointer is over dock or any menu is open.
+        // Once pointer leaves, hide smoothly with hideDock!
+        this._triggerTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
+            if (this._isPointerOverDock() || this._menuOpened)
                 return GLib.SOURCE_CONTINUE;
-            }
+
+            this._triggerTimeoutId = 0;
+            this.hideDock();
+            return GLib.SOURCE_REMOVE;
         });
 
         this.showDock();

@@ -51,6 +51,10 @@ const Labels = Object.freeze({
 
 let activePreviewIcon = null;
 
+export function getActivePreviewIcon() {
+    return activePreviewIcon;
+}
+
 const clickAction = Object.freeze({
     SKIP: 0,
     MINIMIZE: 1,
@@ -614,11 +618,20 @@ export const DockAbstractAppIcon = GObject.registerClass({
             case clickAction.MINIMIZE_OR_OVERVIEW:
             case clickAction.SKIP:
                 if (!Main.overview.visible) {
-                    if (this.focused && !hasUrgentWindows) {
-                        this._minimizeWindow(singleOrUrgentWindows ? false : true);
+                    if (singleOrUrgentWindows) {
+                        if (this.focused && !hasUrgentWindows) {
+                            this._minimizeWindow(false);
+                        } else {
+                            const [w] = windows;
+                            Main.activateWindow(w);
+                        }
                     } else {
-                        const [w] = windows;
-                        Main.activateWindow(w);
+                        if (this.focused && !hasUrgentWindows) {
+                            this._cycleThroughWindows();
+                        } else {
+                            const [w] = windows;
+                            Main.activateWindow(w);
+                        }
                     }
                 } else {
                     this.app.activate();

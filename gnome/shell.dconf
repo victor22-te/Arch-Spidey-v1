@@ -1,16 +1,76 @@
 [/]
-app-picker-layout=[{'org.gnome.Contacts.desktop': <{'position': <0>}>, 'org.gnome.Weather.desktop': <{'position': <1>}>, 'org.gnome.clocks.desktop': <{'position': <2>}>, 'org.gnome.Maps.desktop': <{'position': <3>}>, 'org.gnome.Music.desktop': <{'position': <4>}>, 'org.gnome.SimpleScan.desktop': <{'position': <5>}>, 'lstopo.desktop': <{'position': <6>}>, 'org.gnome.Snapshot.desktop': <{'position': <7>}>, 'org.gnome.Characters.desktop': <{'position': <8>}>, 'Utilities': <{'position': <9>}>, 'System': <{'position': <10>}>, 'org.gnome.Console.desktop': <{'position': <11>}>, 'qv4l2.desktop': <{'position': <12>}>, 'org.gnome.Tour.desktop': <{'position': <13>}>, 'org.gnome.Yelp.desktop': <{'position': <14>}>, 'qvidcap.desktop': <{'position': <15>}>, 'org.gnome.Calculator.desktop': <{'position': <16>}>, 'org.gnome.Calendar.desktop': <{'position': <17>}>, 'org.gnome.TextEditor.desktop': <{'position': <18>}>, 'org.gnome.Software.desktop': <{'position': <19>}>, 'btop.desktop': <{'position': <20>}>}, {'antigravity-ide.desktop': <{'position': <0>}>, 'com.microsoft.VSCode.desktop': <{'position': <1>}>, 'brave-browser.desktop': <{'position': <2>}>, 'google-chrome.desktop': <{'position': <3>}>, 'com.rtosta.zapzap.desktop': <{'position': <4>}>}]
+app-picker-layout=[{'org.gnome.Contacts.desktop': <{'position': <0>}>, 'org.gnome.Weather.desktop': <{'position': <1>}>, 'org.gnome.clocks.desktop': <{'position': <2>}>, 'org.gnome.Maps.desktop': <{'position': <3>}>, 'org.gnome.Music.desktop': <{'position': <4>}>, 'org.gnome.SimpleScan.desktop': <{'position': <5>}>, 'lstopo.desktop': <{'position': <6>}>, 'org.gnome.Snapshot.desktop': <{'position': <7>}>, 'org.gnome.Characters.desktop': <{'position': <8>}>, 'Utilities': <{'position': <9>}>, 'System': <{'position': <10>}>, 'org.gnome.Console.desktop': <{'position': <11>}>, 'qv4l2.desktop': <{'position': <12>}>, 'org.gnome.Tour.desktop': <{'position': <13>}>, 'org.gnome.Yelp.desktop': <{'position': <14>}>, 'qvidcap.desktop': <{'position': <15>}>, 'org.gnome.Calculator.desktop': <{'position': <16>}>, 'org.gnome.Calendar.desktop': <{'position': <17>}>, 'org.gnome.TextEditor.desktop': <{'position': <18>}>, 'org.gnome.Software.desktop': <{'position': <19>}>, 'btop.desktop': <{'position': <20>}>}, {'com.microsoft.VSCode.desktop': <{'position': <0>}>, 'com.mattjakeman.ExtensionManager.desktop': <{'position': <1>}>, 'lyla-widget.desktop': <{'position': <2>}>, 'spider-hud.desktop': <{'position': <3>}>, 'org.gnome.Epiphany.desktop': <{'position': <4>}>, 'ai.storyteller.artcraft-launcher.desktop': <{'position': <5>}>, 'ai.storyteller.gridcraft.desktop': <{'position': <6>}>, 'io.tangencylabs.solidcraft.desktop': <{'position': <7>}>, 'ai.storyteller.wordcraft.desktop': <{'position': <8>}>, 'ai.storyteller.deckcraft.desktop': <{'position': <9>}>, 'ai.storyteller.filmcraft.desktop': <{'position': <10>}>, 'ai.storyteller.photocraft.desktop': <{'position': <11>}>, 'vlc.desktop': <{'position': <12>}>, 'io.github.celluloid_player.Celluloid.desktop': <{'position': <13>}>, 'mpv.desktop': <{'position': <14>}>}]
+disable-extension-version-validation=true
 disable-user-extensions=false
 disabled-extensions=@as []
-enabled-extensions=['spider-hud@spiderman.2099', 'user-theme@gnome-shell-extensions.gcampax.github.com']
-favorite-apps=['kitty.desktop', 'lyla-widget.desktop', 'spider-hud.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Epiphany.desktop', 'org.gnome.Settings.desktop']
+enabled-extensions=['spider-hud@spiderman.2099', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'burn-my-windows@schneegans.github.com', 'dash-to-dock@micxgx.gmail.com', 'CoverflowAltTab@palatis.blogspot.com', 'hanabi-extension@jeffshee.github.io', 'caffeine@patapon.info', 'hidetopbar@mathieu.bidon.ca']
+favorite-apps=['org.gnome.Nautilus.desktop', 'brave-browser.desktop', 'google-chrome.desktop', 'com.rtosta.zapzap.desktop', 'antigravity-ide.desktop', 'org.gnome.Settings.desktop', 'kitty.desktop', 'brave-hichoggbhebpgpgcbcgfpkjmohpcflhh-Default.desktop', 'ai.storyteller.pdfcraft.desktop']
+remember-mount-password=false
 welcome-dialog-last-shown-version='51.1'
+
+[extensions/burn-my-windows]
+active-profile='/home/spider-man/.config/burn-my-windows/profiles/1793842214492039.conf'
+last-extension-version=49
+last-prefs-version=49
+prefs-open-count=40
+
+[extensions/caffeine]
+cli-toggle=false
+indicator-position-max=1
+user-enabled=true
+
+[extensions/coverflowalttab]
+switcher-background-color=(1.0, 1.0, 1.0)
+
+[extensions/dash-to-dock]
+always-center-icons=false
+animation-time=0.20000000000000001
+apply-custom-theme=false
+autohide=true
+autohide-in-fullscreen=false
+background-opacity=0.80000000000000004
+click-action='minimize-or-previews'
+custom-background-color=false
+custom-theme-shrink=true
+dash-max-icon-size=48
+disable-overview-on-startup=false
+dock-position='BOTTOM'
+extend-height=false
+height-fraction=0.90000000000000002
+hide-delay=0.20000000000000001
+icon-size-fixed=false
+intellihide=true
+intellihide-mode='FOCUS_APPLICATION_WINDOWS'
+isolate-monitors=false
+multi-monitor=true
+preferred-monitor=-2
+preferred-monitor-by-connector='eDP-1'
+pressure-threshold=100.0
+preview-size-scale=0.22
+require-pressure-to-show=true
+running-indicator-style='DEFAULT'
+scroll-to-focused-application=true
+show-delay=0.25
+show-dock-urgent-notify=true
+show-mounts-network=false
+show-running=true
+show-windows-preview=true
+transparency-mode='DEFAULT'
+
+[extensions/hidetopbar]
+mouse-sensitive=true
+mouse-sensitive-fullscreen-window=true
+pressure-threshold=50
 
 [extensions/user-theme]
 name='SpiderMan-2099-Cyber'
 
 [keybindings]
 toggle-quick-settings=['<Super><Shift>s']
+
+[weather]
+automatic-location=true
+locations=@av []
 
 [world-clocks]
 locations=[<(uint32 2, <('Geneva', 'LSGG', true, [(0.80721477904737737, 0.10704685497122136)], [(0.80634211442138026, 0.10762864302408116)])>)>]

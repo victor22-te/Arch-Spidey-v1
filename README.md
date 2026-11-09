@@ -15,6 +15,7 @@ Suite completa de personalización futurista inspirada en **Spider-Man 2099 (Mig
   - Centro de Calendario y Notificaciones con bordes neón carmesí y cian
   - Pantalla de bloqueo (aro de avatar neón, entrada de contraseña y reloj)
   - Dock / Dash y vista de actividades
+- **`local/share/gnome-shell/extensions/hidetopbar@mathieu.bidon.ca/`**: Ocultación inteligente (Autohide / Intellihide) para la barra superior estilo Dash to Dock: se oculta automáticamente para dejar la pantalla limpia y reaparece suavemente al acercar el puntero del cursor al borde superior.
 - **`local/bin/spider-hud`**: Monitor táctico interactivo en terminal (`lyla` / `hud` / `spider-sense`) con radar y selector de trajes (`[M]` para cambiar entre *2099*, *Miles Morales* y *Symbiote*).
 - **`local/bin/lyla-widget`**: Widget holográfico de escritorio en GTK4 + Cairo con radar arácnido rotatorio en vivo.
 - **`wallpapers/`**: Fondos de pantalla Spider-Man 2099 y avatar circular para pantalla de bloqueo (`AccountsService`).

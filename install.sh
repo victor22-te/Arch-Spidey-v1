@@ -101,8 +101,15 @@ gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
 
 gsettings set org.gnome.shell disable-user-extensions false
 gsettings set org.gnome.shell disable-extension-version-validation true
-gsettings set org.gnome.shell enabled-extensions "['spider-hud@spiderman.2099', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'burn-my-windows@schneegans.github.com', 'dash-to-dock@micxgx.gmail.com', 'CoverflowAltTab@palatis.blogspot.com', 'hanabi-extension@jeffshee.github.io']"
+gsettings set org.gnome.shell enabled-extensions "['spider-hud@spiderman.2099', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'burn-my-windows@schneegans.github.com', 'dash-to-dock@micxgx.gmail.com', 'CoverflowAltTab@palatis.blogspot.com', 'hanabi-extension@jeffshee.github.io', 'caffeine@patapon.info', 'hidetopbar@mathieu.bidon.ca']"
 gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.user-theme name 'SpiderMan-2099-Cyber' 2>/dev/null || true
+
+# Configuración Hide Top Bar (Autohide / Intellihide sensible al cursor al estilo Dash to Dock)
+gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.hidetopbar mouse-sensitive true 2>/dev/null || true
+gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.hidetopbar mouse-sensitive-fullscreen-window true 2>/dev/null || true
+gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.hidetopbar enable-intellihide true 2>/dev/null || true
+gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.hidetopbar pressure-threshold 50 2>/dev/null || true
+gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.hidetopbar animation-time-autohide 0.2 2>/dev/null || true
 
 # Configuración Hanabi Live Wallpaper
 dconf write /io/github/jeffshee/hanabi-extension/video-path "'$TARGET_HOME/Pictures/spiderman_2099_live.mp4'"

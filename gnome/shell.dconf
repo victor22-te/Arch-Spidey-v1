@@ -16,7 +16,7 @@ prefs-open-count=40
 
 [extensions/caffeine]
 cli-toggle=false
-indicator-position-max=1
+indicator-position-max=0
 user-enabled=true
 
 [extensions/coverflowalttab]

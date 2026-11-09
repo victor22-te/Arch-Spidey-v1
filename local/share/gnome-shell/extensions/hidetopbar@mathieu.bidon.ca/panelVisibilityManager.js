@@ -89,6 +89,7 @@ export class PanelVisibilityManager {
             : Meta.CursorTracker.get_for_display(global.display)  // GNOME Shell 45-47
         );
         this._pointerListener = null;
+        this._edgeWatchId = null;
 
         // store all signal and timeout handlers in one object to make sure that they are
         // removed on destroy
@@ -399,8 +400,44 @@ export class PanelVisibilityManager {
         }
     }
 
+    _setupEdgeWatch() {
+        this._stopEdgeWatch();
+        if (!this._settings.get_boolean('mouse-sensitive'))
+            return;
+
+        this._edgeWatchId = this._cursorTracker.connect(
+            'position-invalidated',
+            () => {
+                const [x, y] = global.get_pointer();
+                const monitor = Main.layoutManager.primaryMonitor;
+                if (!monitor) return;
+
+                if (y <= monitor.y + 2 && x >= monitor.x && x < monitor.x + monitor.width) {
+                    if (Main.overview.visible) return;
+                    if (monitor.inFullscreen && !this._settings.get_boolean('mouse-sensitive-fullscreen-window'))
+                        return;
+                    if (this._animationActive || PanelBox.y === this._base_y)
+                        return;
+
+                    this.show(
+                        this._settings.get_double('animation-time-autohide'),
+                        "mouse-enter"
+                    );
+                }
+            }
+        );
+    }
+
+    _stopEdgeWatch() {
+        if (this._edgeWatchId) {
+            this._cursorTracker.disconnect(this._edgeWatchId);
+            this._edgeWatchId = null;
+        }
+    }
+
     _disablePressureBarrier() {
         this._stopWatchingPointer();
+        this._stopEdgeWatch();
 
         if(this._panelBarrier && this._panelPressure) {
             this._panelPressure.removeBarrier(this._panelBarrier);
@@ -433,10 +470,9 @@ export class PanelVisibilityManager {
             }
         );
         let anchor_y = PanelBox.get_pivot_point()[1],
-            direction = Meta.BarrierDirection.POSITIVE_Y;
+            direction = Meta.BarrierDirection.POSITIVE_Y | Meta.BarrierDirection.NEGATIVE_Y;
         if(anchor_y < 0) {
             anchor_y -= PanelBox.height;
-            direction = Meta.BarrierDirection.NEGATIVE_Y;
         }
         this._panelBarrier = new Meta.Barrier({
             ...(shellVersion === 45  ? { display: global.display } : { backend: global.backend }),
@@ -491,6 +527,7 @@ export class PanelVisibilityManager {
         if(this._settings.get_boolean('mouse-sensitive')) {
             this._disablePressureBarrier();
             this._initPressureBarrier();
+            this._setupEdgeWatch();
         } else this._disablePressureBarrier();
     }
 

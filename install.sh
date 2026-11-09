@@ -15,7 +15,7 @@ echo -e "\e[1;31m╚════════════════════
 
 # 1. Instalar paquetes base necesarios si estamos en Arch Linux y faltan
 NEEDED_PKGS=()
-for pkg in kitty fastfetch starship ttf-jetbrains-mono-nerd librsvg imagemagick python-gobject gtk4; do
+for pkg in kitty fastfetch starship ttf-jetbrains-mono-nerd librsvg imagemagick python-gobject gtk4 gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav dconf; do
     if ! pacman -Qi "$pkg" &>/dev/null; then
         NEEDED_PKGS+=("$pkg")
     fi
@@ -42,6 +42,10 @@ cp "$REPO_DIR/config/starship.toml" "$TARGET_HOME/.config/starship.toml"
 cp -r "$REPO_DIR/config/gtk-3.0/"* "$TARGET_HOME/.config/gtk-3.0/"
 cp -r "$REPO_DIR/config/gtk-4.0/"* "$TARGET_HOME/.config/gtk-4.0/"
 cp "$REPO_DIR/config/autostart/lyla-widget.desktop" "$TARGET_HOME/.config/autostart/"
+if [ -d "$REPO_DIR/config/burn-my-windows" ]; then
+    mkdir -p "$TARGET_HOME/.config/burn-my-windows"
+    cp -r "$REPO_DIR/config/burn-my-windows/"* "$TARGET_HOME/.config/burn-my-windows/"
+fi
 
 # 4. Copiar archivos de Home (.bashrc y .face)
 cp "$REPO_DIR/home/.bashrc" "$TARGET_HOME/.bashrc"
@@ -66,8 +70,9 @@ cp -r "$REPO_DIR/local/share/themes/SpiderMan-2099-Cyber" "$TARGET_HOME/.themes/
 # 6. Copiar Wallpapers y Avatar
 echo -e "\e[1;36m[󰯊] Copiando fondos de pantalla y avatar Spider-Man 2099...\e[0m"
 cp "$REPO_DIR/wallpapers/"* "$TARGET_HOME/Pictures/"
-cp "$REPO_DIR/wallpapers/spiderman_2099_cyber.jpg" "$TARGET_HOME/Pictures/spiderman_cyberpunk.jpg"
-cp "$REPO_DIR/wallpapers/spiderman_2099_cyber.jpg" "$TARGET_HOME/Imágenes/spiderman_2099_cyber.jpg" 2>/dev/null || true
+cp "$REPO_DIR/wallpapers/"* "$TARGET_HOME/Imágenes/" 2>/dev/null || true
+cp "$REPO_DIR/wallpapers/spiderman_2099_cyber.jpg" "$TARGET_HOME/Pictures/spiderman_cyberpunk.jpg" 2>/dev/null || true
+cp "$REPO_DIR/wallpapers/spiderman_2099_cyber.jpg" "$TARGET_HOME/Imágenes/spiderman_cyberpunk.jpg" 2>/dev/null || true
 
 # 7. Adaptar rutas si el usuario en el nuevo dispositivo no se llama 'spider-man'
 if [ "$TARGET_HOME" != "/home/spider-man" ]; then
@@ -84,6 +89,24 @@ fi
 
 # 8. Aplicar configuraciones de GNOME (gsettings / dconf) y Avatar AccountsService
 echo -e "\e[1;36m[󰯊] Aplicando configuraciones de GNOME, fondos y atajos de teclado...\e[0m"
+
+# 8.1 Restaurar volcados dconf completos si existen en el repositorio
+if [ -d "$REPO_DIR/gnome" ]; then
+    echo -e "\e[1;36m[󰯊] Cargando volcados dconf para extensiones y entorno GNOME...\e[0m"
+    [ -f "$REPO_DIR/gnome/interface.dconf" ] && dconf load /org/gnome/desktop/interface/ < "$REPO_DIR/gnome/interface.dconf" 2>/dev/null || true
+    [ -f "$REPO_DIR/gnome/background.dconf" ] && dconf load /org/gnome/desktop/background/ < "$REPO_DIR/gnome/background.dconf" 2>/dev/null || true
+    [ -f "$REPO_DIR/gnome/screensaver.dconf" ] && dconf load /org/gnome/desktop/screensaver/ < "$REPO_DIR/gnome/screensaver.dconf" 2>/dev/null || true
+    [ -f "$REPO_DIR/gnome/wm-preferences.dconf" ] && dconf load /org/gnome/desktop/wm/preferences/ < "$REPO_DIR/gnome/wm-preferences.dconf" 2>/dev/null || true
+    [ -f "$REPO_DIR/gnome/wm-keybindings.dconf" ] && dconf load /org/gnome/desktop/wm/keybindings/ < "$REPO_DIR/gnome/wm-keybindings.dconf" 2>/dev/null || true
+    [ -f "$REPO_DIR/gnome/media-keys.dconf" ] && dconf load /org/gnome/settings-daemon/plugins/media-keys/ < "$REPO_DIR/gnome/media-keys.dconf" 2>/dev/null || true
+    [ -f "$REPO_DIR/gnome/shell.dconf" ] && dconf load /org/gnome/shell/ < "$REPO_DIR/gnome/shell.dconf" 2>/dev/null || true
+    [ -f "$REPO_DIR/gnome/dash-to-dock.dconf" ] && dconf load /org/gnome/shell/extensions/dash-to-dock/ < "$REPO_DIR/gnome/dash-to-dock.dconf" 2>/dev/null || true
+    [ -f "$REPO_DIR/gnome/burn-my-windows.dconf" ] && dconf load /org/gnome/shell/extensions/burn-my-windows/ < "$REPO_DIR/gnome/burn-my-windows.dconf" 2>/dev/null || true
+    [ -f "$REPO_DIR/gnome/hidetopbar.dconf" ] && dconf load /org/gnome/shell/extensions/hidetopbar/ < "$REPO_DIR/gnome/hidetopbar.dconf" 2>/dev/null || true
+    [ -f "$REPO_DIR/gnome/hanabi.dconf" ] && dconf load /io/github/jeffshee/hanabi-extension/ < "$REPO_DIR/gnome/hanabi.dconf" 2>/dev/null || true
+fi
+
+# 8.2 Configuraciones base y apariencia general
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface gtk-theme 'SpiderMan-2099-Cyber'
 gsettings set org.gnome.desktop.interface accent-color 'red' 2>/dev/null || true
@@ -104,7 +127,23 @@ gsettings set org.gnome.shell disable-extension-version-validation true
 gsettings set org.gnome.shell enabled-extensions "['spider-hud@spiderman.2099', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'burn-my-windows@schneegans.github.com', 'dash-to-dock@micxgx.gmail.com', 'CoverflowAltTab@palatis.blogspot.com', 'hanabi-extension@jeffshee.github.io', 'caffeine@patapon.info', 'hidetopbar@mathieu.bidon.ca']"
 gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.user-theme name 'SpiderMan-2099-Cyber' 2>/dev/null || true
 
-# Configuración Hide Top Bar (Autohide / Intellihide sensible al cursor al estilo Dash to Dock)
+# Configuración Dash to Dock (Cyberpunk Floating Dock centrado al fondo con autohide)
+DOCK_SCHEMA="$TARGET_HOME/.local/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com/schemas"
+if [ -d "$DOCK_SCHEMA" ]; then
+    gsettings --schemadir "$DOCK_SCHEMA" set org.gnome.shell.extensions.dash-to-dock dock-position 'BOTTOM' 2>/dev/null || true
+    gsettings --schemadir "$DOCK_SCHEMA" set org.gnome.shell.extensions.dash-to-dock dock-fixed false 2>/dev/null || true
+    gsettings --schemadir "$DOCK_SCHEMA" set org.gnome.shell.extensions.dash-to-dock autohide true 2>/dev/null || true
+    gsettings --schemadir "$DOCK_SCHEMA" set org.gnome.shell.extensions.dash-to-dock intellihide true 2>/dev/null || true
+    gsettings --schemadir "$DOCK_SCHEMA" set org.gnome.shell.extensions.dash-to-dock intellihide-mode 'FOCUS_APPLICATION_WINDOWS' 2>/dev/null || true
+    gsettings --schemadir "$DOCK_SCHEMA" set org.gnome.shell.extensions.dash-to-dock extend-height false 2>/dev/null || true
+    gsettings --schemadir "$DOCK_SCHEMA" set org.gnome.shell.extensions.dash-to-dock custom-theme-shrink true 2>/dev/null || true
+    gsettings --schemadir "$DOCK_SCHEMA" set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 48 2>/dev/null || true
+    gsettings --schemadir "$DOCK_SCHEMA" set org.gnome.shell.extensions.dash-to-dock click-action 'minimize-or-previews' 2>/dev/null || true
+    gsettings --schemadir "$DOCK_SCHEMA" set org.gnome.shell.extensions.dash-to-dock show-windows-preview true 2>/dev/null || true
+    gsettings --schemadir "$DOCK_SCHEMA" set org.gnome.shell.extensions.dash-to-dock apply-glossy-effect true 2>/dev/null || true
+fi
+
+# Configuración Hide Top Bar (Autohide / Intellihide sensible al cursor con detector de bordes a 0ms)
 gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.hidetopbar mouse-sensitive true 2>/dev/null || true
 gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.hidetopbar mouse-sensitive-fullscreen-window true 2>/dev/null || true
 gsettings --schemadir "$TARGET_HOME/.local/share/glib-2.0/schemas" set org.gnome.shell.extensions.hidetopbar enable-intellihide true 2>/dev/null || true
@@ -118,6 +157,9 @@ dconf write /io/github/jeffshee/hanabi-extension/mute true
 dconf write /io/github/jeffshee/hanabi-extension/pause-on-battery 1
 dconf write /io/github/jeffshee/hanabi-extension/pause-on-maximize-or-fullscreen 1
 dconf write /io/github/jeffshee/hanabi-extension/random-start-position true
+
+# Perfil Burn My Windows
+dconf write /org/gnome/shell/extensions/burn-my-windows/active-profile "'$TARGET_HOME/.config/burn-my-windows/profiles/1793842214492039.conf'" 2>/dev/null || true
 gsettings set org.gnome.shell favorite-apps "['kitty.desktop', 'lyla-widget.desktop', 'spider-hud.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Epiphany.desktop', 'org.gnome.Settings.desktop']"
 
 # Atajos de teclado

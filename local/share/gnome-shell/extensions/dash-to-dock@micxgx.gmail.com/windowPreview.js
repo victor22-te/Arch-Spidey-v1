@@ -26,8 +26,8 @@ import {
     Utils,
 } from './imports.js';
 
-const PREVIEW_MAX_WIDTH = 250;
-const PREVIEW_MAX_HEIGHT = 150;
+const PREVIEW_MAX_WIDTH = 200;
+const PREVIEW_MAX_HEIGHT = 120;
 
 const PREVIEW_ANIMATION_DURATION = 250;
 const MAX_PREVIEW_GENERATION_ATTEMPTS = 15;
@@ -356,7 +356,7 @@ class WindowPreviewMenuItem extends PopupMenu.PopupBaseMenuItem {
 
         // TODO: improve the way the closebutton is layout. Just use some padding
         // for the moment.
-        this._cloneBin.set_style('padding-bottom: 0.5em');
+        this._cloneBin.set_style('padding-bottom: 0.25em');
 
         const buttonLayout = Meta.prefs_get_button_layout();
         this.closeButton = new St.Button({
@@ -379,15 +379,18 @@ class WindowPreviewMenuItem extends PopupMenu.PopupBaseMenuItem {
         overlayGroup.add_child(this._cloneBin);
         overlayGroup.add_child(this.closeButton);
 
-        const label = new St.Label({text: window.get_title()});
-        label.set_style(`max-width: ${PREVIEW_MAX_WIDTH}px`);
+        // The title label is capped at the clone width (with a floor so
+        // short titles stay readable): otherwise a wide label makes the
+        // popup frame much wider than the thumbnail itself.
+        this._label = new St.Label({text: window.get_title()});
+        this._label.set_style(`max-width: ${Math.max(Math.round(this._width * this._scale), 140)}px`);
         const labelBin = new St.Bin({
-            child: label,
+            child: this._label,
             x_align: Clutter.ActorAlign.CENTER,
         });
 
         this._windowTitleId = this._window.connect('notify::title', () => {
-            label.set_text(this._window.get_title());
+            this._label.set_text(this._window.get_title());
         });
 
         const box = new St.BoxLayout({
@@ -464,6 +467,8 @@ class WindowPreviewMenuItem extends PopupMenu.PopupBaseMenuItem {
         // This gets the actual windows size for the preview
         [this._width, this._height, this._scale] = this._getWindowPreviewSize();
         this._cloneBin.set_size(this._width * this._scale, this._height * this._scale);
+        if (this._label)
+            this._label.set_style(`max-width: ${Math.max(Math.round(this._width * this._scale), 140)}px`);
     }
 
     _cloneTexture(metaWin) {

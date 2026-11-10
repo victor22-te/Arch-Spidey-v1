@@ -1097,6 +1097,19 @@ const DockedDash = GObject.registerClass({
     }
 
     _checkDockDwellNow(x, y) {
+        // Safety net for stale hover: the dock hides when the box's `hover`
+        // flag flips, but that flag can stay stuck `true` after leaving the
+        // dock from an icon that shows no preview menu — unlike icons with
+        // a running app, there is no menu-close to re-sync hover. The
+        // cursor tracker fires on every pointer move regardless of actor
+        // hover, so if the flag claims the pointer is over the dock while
+        // the real position is outside it, force a re-sync and re-evaluate.
+        if (this.autohideEnabled && this._box?.hover &&
+            !this._isPointerOverDock()) {
+            this._box.sync_hover();
+            this.updateDashVisibility();
+        }
+
         const workArea = Main.layoutManager.getWorkAreaForMonitor(this._monitor.index);
         let shouldDwell;
         // Check for the correct screen edge, extending the sensitive area to the whole workarea,

@@ -780,16 +780,20 @@ const DockedDash = GObject.registerClass({
     _isPointerOverDock() {
         if (this._menuOpened)
             return true;
-        if (this._box?.hover || this.hover)
-            return true;
 
         const activeIcon = AppIcons.getActivePreviewIcon?.();
         if (activeIcon?._previewMenu?.isOpen)
             return true;
 
         const monitor = this._monitor;
-        if (!monitor)
-            return false;
+        if (!monitor) {
+            // Without monitor geometry we cannot check the real pointer
+            // position, so fall back to the Clutter hover flags.
+            // NOTE: the hover flags are NOT trusted when geometry is
+            // available: a missed leave event leaves them stuck on true,
+            // which used to keep the dock visible forever.
+            return !!(this._box?.hover || this.hover);
+        }
 
         const [x, y] = global.get_pointer();
         if (x < monitor.x || x > monitor.x + monitor.width ||
@@ -805,7 +809,7 @@ const DockedDash = GObject.registerClass({
                 this.height || 0,
                 70
             );
-            const zoneTop = monitor.y + monitor.height - (dockH + 50);
+            const zoneTop = monitor.y + monitor.height - (dockH + 12);
             if (y >= zoneTop && y <= monitor.y + monitor.height) {
                 if (DockManager.settings.extendHeight)
                     return true;
@@ -820,10 +824,13 @@ const DockedDash = GObject.registerClass({
                             boxW = tw;
                         }
                     }
-                    if (x >= boxX - 60 && x <= boxX + boxW + 60)
+                    if (x >= boxX - 15 && x <= boxX + boxW + 15)
                         return true;
                 } catch (e) {
-                    return true;
+                    // Never assume the pointer is over the dock when the
+                    // geometry cannot be computed: that failure mode left
+                    // the dock stuck visible.
+                    return false;
                 }
             }
             break;
@@ -834,7 +841,7 @@ const DockedDash = GObject.registerClass({
                 this.get_height?.() || 0,
                 70
             );
-            const zoneBottom = monitor.y + dockH + 50;
+            const zoneBottom = monitor.y + dockH + 12;
             if (y >= monitor.y && y <= zoneBottom) {
                 if (DockManager.settings.extendHeight)
                     return true;
@@ -842,22 +849,22 @@ const DockedDash = GObject.registerClass({
                     const [tx] = this._box.get_transformed_position();
                     const tw = this._box.get_width();
                     if (tw > 0)
-                        return (x >= tx - 60 && x <= tx + tw + 60);
+                        return (x >= tx - 15 && x <= tx + tw + 15);
                 } catch (e) {
-                    return true;
+                    return false;
                 }
             }
             break;
         }
         case St.Side.LEFT: {
             const dockW = Math.max(this._box?.get_width?.() || 0, this.get_width?.() || 0, 70);
-            if (x >= monitor.x && x <= monitor.x + dockW + 50)
+            if (x >= monitor.x && x <= monitor.x + dockW + 12)
                 return true;
             break;
         }
         case St.Side.RIGHT: {
             const dockW = Math.max(this._box?.get_width?.() || 0, this.get_width?.() || 0, 70);
-            if (x >= monitor.x + monitor.width - (dockW + 50) && x <= monitor.x + monitor.width)
+            if (x >= monitor.x + monitor.width - (dockW + 12) && x <= monitor.x + monitor.width)
                 return true;
             break;
         }

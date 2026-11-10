@@ -1239,13 +1239,57 @@ const DockedDash = GObject.registerClass({
             this._triggerTimeoutId = 0;
         }
 
-        // One-shot check after delay so dock doesn't stay stuck if mouse immediately left
-        this._triggerTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 400, () => {
-            this._triggerTimeoutId = 0;
-            if (!this._isPointerOverDock() && !this._menuOpened) {
-                this.hideDock();
+        // Restored from upstream dash-to-dock v110: in case the mouse moves
+        // away from the dock area before hovering it, the leave event would
+        // never be triggered and the dock would stay visible forever. So
+        // keep checking every 250 ms until the pointer is really outside
+        // the dock's static box, then run the normal hide path. (The
+        // one-shot check that was here only looked once and never again.)
+        this._triggerTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
+            const [x, y, mods_] = global.get_pointer();
+            let shouldHide = true;
+            switch (this._position) {
+            case St.Side.LEFT:
+                if (x <= this._staticBox.x2 &&
+                    x >= this._monitor.x &&
+                    y >= this._monitor.y &&
+                    y <= this._monitor.y + this._monitor.height)
+                    shouldHide = false;
+
+                break;
+
+            case St.Side.RIGHT:
+                if (x >= this._staticBox.x1 &&
+                    x <= this._monitor.x + this._monitor.width &&
+                    y >= this._monitor.y &&
+                    y <= this._monitor.y + this._monitor.height)
+                    shouldHide = false;
+
+                break;
+
+            case St.Side.TOP:
+                if (x >= this._monitor.x &&
+                    x <= this._monitor.x + this._monitor.width &&
+                    y <= this._staticBox.y2 &&
+                    y >= this._monitor.y)
+                    shouldHide = false;
+
+                break;
+
+            case St.Side.BOTTOM:
+                if (x >= this._monitor.x &&
+                    x <= this._monitor.x + this._monitor.width &&
+                    y >= this._staticBox.y1 &&
+                    y <= this._monitor.y + this._monitor.height)
+                    shouldHide = false;
             }
-            return GLib.SOURCE_REMOVE;
+            if (shouldHide) {
+                this._triggerTimeoutId = 0;
+                this._hoverChanged();
+                return GLib.SOURCE_REMOVE;
+            } else {
+                return GLib.SOURCE_CONTINUE;
+            }
         });
 
         this.showDock();

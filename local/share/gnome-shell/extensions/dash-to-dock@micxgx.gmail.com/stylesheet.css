@@ -369,8 +369,16 @@
 .dashtodock-app-well-preview-menu-item:focus {
   background-color: rgba(255, 255, 255, 0.14); }
 
+.dashtodock-app-well-preview-menu-item .window-close {
+  background-color: #ff2a4b;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4); }
+
+.dashtodock-app-well-preview-menu-item .window-close:hover {
+  background-color: #ff5370; }
+
 .dashtodock-app-well-preview-menu-item.bottom {
-  padding: 0.5em 0.5em; }
+  padding: 0.3em 0.3em; }
   .dashtodock-app-well-preview-menu-item.bottom:ltr:first-child, .dashtodock-app-well-preview-menu-item.bottom:rtl:last-child {
     padding-left: 1em; }
   .dashtodock-app-well-preview-menu-item.bottom:ltr:last-child, .dashtodock-app-well-preview-menu-item.bottom:rtl:first-child {

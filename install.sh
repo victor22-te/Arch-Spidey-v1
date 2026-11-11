@@ -65,8 +65,11 @@ cp -r "$REPO_DIR/local/share/gnome-shell/extensions/"* "$TARGET_HOME/.local/shar
 mkdir -p "$TARGET_HOME/.local/share/glib-2.0/schemas"
 cp -r "$REPO_DIR/local/share/glib-2.0/schemas/"* "$TARGET_HOME/.local/share/glib-2.0/schemas/" 2>/dev/null || true
 glib-compile-schemas "$TARGET_HOME/.local/share/glib-2.0/schemas" 2>/dev/null || true
-cp -r "$REPO_DIR/local/share/themes/SpiderMan-2099-Cyber" "$TARGET_HOME/.local/share/themes/"
-cp -r "$REPO_DIR/local/share/themes/SpiderMan-2099-Cyber" "$TARGET_HOME/.themes/"
+cp -r "$REPO_DIR/local/share/themes/"* "$TARGET_HOME/.local/share/themes/"
+cp -r "$REPO_DIR/local/share/themes/"* "$TARGET_HOME/.themes/"
+# (Los 5 temas shell de LYLA: SpiderMan-2099-Cyber, SpiderMan-Miles-Morales,
+#  SpiderMan-Symbiote, SpiderMan-Classic y Lyla-Default. La extensión
+#  spider-hud carga el que corresponde al tema activo de LYLA.)
 
 # 6. Copiar Wallpapers y Avatar
 echo -e "\e[1;36m[󰯊] Copiando fondos de pantalla y avatar Spider-Man 2099...\e[0m"

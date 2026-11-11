@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=SpiderMan-Miles-Morales
+Comment=Miles Morales / Brooklyn Venom Blast Theme
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=SpiderMan-Miles-Morales
+MetacityTheme=SpiderMan-Miles-Morales
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=appmenu:minimize,maximize,close

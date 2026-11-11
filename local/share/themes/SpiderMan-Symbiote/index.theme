@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=SpiderMan-Symbiote
+Comment=Symbiote / Venom Black Suit Theme
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=SpiderMan-Symbiote
+MetacityTheme=SpiderMan-Symbiote
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=appmenu:minimize,maximize,close

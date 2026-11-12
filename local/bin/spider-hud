@@ -338,8 +338,9 @@ def main(stdscr):
     status_banner = "LISTO — Presiona [Enter] o [/] para escribir, [V] para micrófono, [S] para Status de Modelos"
 
     prov_init, mod_init = agent.router.get_active_model()
+    theme = agent.themes.active
     chat_logs = [
-        f"󰯊  LYLA 2099 EN LÍNEA — Modelo activo: {prov_init} ({mod_init})",
+        f"󰯊  {theme.name} EN LÍNEA — Modelo activo: {prov_init} ({mod_init})",
         "Escribe comandos (/comands, /model, /status, /calendar, /alarm, /sys) o habla con LYLA.",
     ]
 
@@ -359,7 +360,8 @@ def main(stdscr):
 
         add_chat_log(f"Víctor > {user_text}")
         is_busy = True
-        status_banner = "  LYLA procesando en la nube 2099..."
+        theme = agent.themes.active
+        status_banner = f"  {theme.name} procesando en la nube..."
 
         def _worker():
             nonlocal voice_enabled, is_busy, status_banner
@@ -556,14 +558,14 @@ def main(stdscr):
 
         active_prov, active_mod = agent.router.get_active_model()
         v_badge = " VOZ ON" if voice_enabled else " VOZ OFF"
-        mode_name = modes[mode_idx][0]
+        theme = agent.themes.active
 
         # Header auto-ajustable al ancho de la ventana
         header_candidates = [
-            f"╔══ 󱇪  ALCHEMAX 2099 // LYLA HUD [{mode_name}] • LLM: {active_prov.upper()}:{active_mod} ({v_badge}) ══╗",
-            f"╔══ 󱇪  ALCHEMAX 2099 // LYLA HUD • LLM: {active_prov.upper()}:{active_mod} ({v_badge}) ══╗",
-            f"╔═ 󱇪  LYLA 2099 • {active_prov.upper()}:{active_mod} ({v_badge}) ═╗",
-            f"󱇪 LYLA 2099 • {active_mod} ({v_badge})",
+            f"╔══ 󱇪  {theme.header} • LLM: {active_prov.upper()}:{active_mod} ({v_badge}) ══╗",
+            f"╔══ 󱇪  {theme.header} • LLM: {active_prov.upper()}:{active_mod} ══╗",
+            f"╔═ 󱇪  {theme.name} • {active_prov.upper()}:{active_mod} ({v_badge}) ═╗",
+            f"󱇪 {theme.name} • {active_mod} ({v_badge})",
         ]
         header = header_candidates[-1]
         for hc in header_candidates:
@@ -602,7 +604,7 @@ def main(stdscr):
                     )
                     sense_color = 1 if (total_cpu > 75 or pulse_frames > 0) else 2
                     stdscr.addstr(sense_y + 1, 2, f"│ {wave} │", curses.color_pair(sense_color) | curses.A_BOLD)
-                    status_txt = "ALERTA MULTIVERSAL!" if pulse_frames > 0 else ("CARGA ALTA" if total_cpu > 75 else "SIN ANOMALÍAS (2099)")
+                    status_txt = "ALERTA MULTIVERSAL!" if pulse_frames > 0 else ("CARGA ALTA" if total_cpu > 75 else "SIN ANOMALÍAS")
                     stdscr.addstr(sense_y + 2, 2, f"│ Estado: {status_txt:<18} │", curses.color_pair(4 if total_cpu <= 75 and pulse_frames == 0 else 1) | curses.A_BOLD)
                     stdscr.addstr(sense_y + 3, 2, f"│ Red RX: {rx_rate:6.1f} KB/s        │", curses.color_pair(6))
                     stdscr.addstr(sense_y + 4, 2, f"│ Red TX: {tx_rate:6.1f} KB/s        │", curses.color_pair(6))
@@ -707,9 +709,9 @@ def main(stdscr):
             # CONSOLA INTERACTIVA DE LYLA EN EL HUD (AUTO-AJUSTADA)
             if cy_chat_top < chat_bottom:
                 chat_hdr_candidates = [
-                    "╔══ 󱇪  COMUNICACIÓN NEURAL CON LYLA 2099 (Comandos y Voz Activos) ══╗",
-                    "╔══ 󱇪  COMUNICACIÓN NEURAL CON LYLA 2099 ══╗",
-                    "󱇪  CONSOLA NEURAL LYLA 2099",
+                    f"╔══ 󱇪  COMUNICACIÓN NEURAL CON {theme.name.upper()} (Comandos y Voz Activos) ══╗",
+                    f"╔══ 󱇪  COMUNICACIÓN NEURAL CON {theme.name.upper()} ══╗",
+                    f"󱇪  CONSOLA NEURAL {theme.name.upper()}",
                 ]
                 chat_hdr = chat_hdr_candidates[-1]
                 for chc in chat_hdr_candidates:

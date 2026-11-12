@@ -10,6 +10,17 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 const THEME_CSS = GLib.get_home_dir() + '/.themes/SpiderMan-2099-Cyber/gnome-shell/gnome-shell.css';
+// Tema activo de LYLA, publicado por el agente en ~/.config/lyla/active-theme.json.
+// La extensión lo lee cada 2 s (en _updateMetrics) y actualiza la barra superior,
+// el menú y el shell theme. Si el archivo no existe o es inválido, queda 2099.
+const THEME_JSON = GLib.get_home_dir() + '/.config/lyla/active-theme.json';
+const DEFAULT_THEME = {
+    id: 'spider-man-2099',
+    badge: '2099 // LYLA',
+    header: 'ALCHEMAX // MIGUEL O’HARA CYBER-HUD v2099',
+    tagline: 'LYLA Holographic Assistant: ONLINE • Nueva York 2099',
+    shell_theme: 'SpiderMan-2099-Cyber',
+};
 
 const SpiderHudIndicator = GObject.registerClass(
 class SpiderHudIndicator extends PanelMenu.Button {
@@ -47,6 +58,9 @@ class SpiderHudIndicator extends PanelMenu.Button {
         this._box.add_child(this._senseLabel);
         this.add_child(this._box);
 
+        this._themeId = null;
+        this._shellTheme = null;
+
         this._buildMenu();
         this._updateMetrics();
 
@@ -64,14 +78,16 @@ class SpiderHudIndicator extends PanelMenu.Button {
             headerBox.orientation = Clutter.Orientation.VERTICAL;
         }
 
-        headerBox.add_child(new St.Label({
+        this._menuHeaderLabel = new St.Label({
             text: '󰯊  ALCHEMAX // MIGUEL O’HARA CYBER-HUD v2099',
             style_class: 'spider-hud-menu-header',
-        }));
-        headerBox.add_child(new St.Label({
+        });
+        headerBox.add_child(this._menuHeaderLabel);
+        this._menuSubLabel = new St.Label({
             text: 'LYLA Holographic Assistant: ONLINE • Nueva York 2099',
             style_class: 'spider-hud-menu-sub',
-        }));
+        });
+        headerBox.add_child(this._menuSubLabel);
         headerItem.add_child(headerBox);
         this.menu.addMenuItem(headerItem);
 
@@ -121,7 +137,66 @@ class SpiderHudIndicator extends PanelMenu.Button {
         return '';
     }
 
+    _readTheme() {
+        // Tema activo publicado por el agente LYLA (JSON). null si no existe o es inválido.
+        try {
+            const text = this._readFileContents(THEME_JSON);
+            if (!text)
+                return null;
+            const data = JSON.parse(text);
+            if (!data || typeof data.id !== 'string')
+                return null;
+            return {
+                id: data.id,
+                badge: typeof data.badge === 'string' ? data.badge : DEFAULT_THEME.badge,
+                header: typeof data.header === 'string' ? data.header : DEFAULT_THEME.header,
+                tagline: typeof data.tagline === 'string' ? data.tagline : DEFAULT_THEME.tagline,
+                shell_theme: typeof data.shell_theme === 'string' ? data.shell_theme : DEFAULT_THEME.shell_theme,
+            };
+        } catch (_e) {
+            return null;
+        }
+    }
+
+    _applyTheme() {
+        // Solo actúa cuando el tema cambió (la extensión revisa cada 2 s).
+        const theme = this._readTheme() || DEFAULT_THEME;
+        if (theme.id === this._themeId)
+            return;
+        this._themeId = theme.id;
+
+        // Barra superior: badge del tema (p. ej. "MILES // LYLA").
+        this._badgeLabel.set_text(`󱇪 ${theme.badge}`);
+        if (this._menuHeaderLabel)
+            this._menuHeaderLabel.set_text(`󰯊  ${theme.header}`);
+        if (this._menuSubLabel)
+            this._menuSubLabel.set_text(theme.tagline);
+
+        // Shell theme del tema (si no existe el CSS, queda el de 2099).
+        if (theme.shell_theme !== this._shellTheme) {
+            this._shellTheme = theme.shell_theme;
+            const cssPath = GLib.get_home_dir() + '/.themes/' + theme.shell_theme + '/gnome-shell/gnome-shell.css';
+            try {
+                const cssFile = Gio.File.new_for_path(cssPath);
+                if (cssFile.query_exists(null)) {
+                    Main.setThemeStylesheet(cssPath);
+                    Main.loadTheme();
+                } else if (theme.shell_theme !== DEFAULT_THEME.shell_theme) {
+                    const fallback = Gio.File.new_for_path(THEME_CSS);
+                    if (fallback.query_exists(null)) {
+                        Main.setThemeStylesheet(THEME_CSS);
+                        Main.loadTheme();
+                    }
+                }
+            } catch (e) {
+                console.error('Error aplicando el shell theme de LYLA:', e);
+            }
+        }
+    }
+
     _updateMetrics() {
+        this._applyTheme();
+
         let cpuPct = 0;
         const statText = this._readFileContents('/proc/stat');
         if (statText) {

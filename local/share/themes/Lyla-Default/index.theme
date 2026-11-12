@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Lyla-Default
+Comment=LYLA / Ambient Intelligence Theme
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Lyla-Default
+MetacityTheme=Lyla-Default
+IconTheme=Adwaita
+CursorTheme=Adwaita
+ButtonLayout=appmenu:minimize,maximize,close

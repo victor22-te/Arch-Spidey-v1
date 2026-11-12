@@ -1,0 +1,393 @@
+/* ============================================================================
+ * SPIDER-MAN 2099 // LYLA HOLOGRAPHIC CYBER-HUD - GNOME SHELL STYLESHEET
+ * Covers:
+ *   1. Top Panel & LYLA Telemetry Indicator
+ *   2. Calendar & Notifications Center (DateMenu Popover)
+ *   3. Quick Settings & System Toggles
+ *   4. Lock Screen / Unlock Dialog (Avatar Ring, Password Entry, Clock)
+ *   5. Dash / Dock & Overview
+ * ============================================================================ */
+
+/* --- 1. TOP PANEL (FLOATING CYBER-HUD BAR) --- */
+#panel {
+    background-color: rgba(10, 17, 40, 0.92) !important;
+    border-bottom: 2px solid #d90429 !important;
+    box-shadow: 0 3px 16px rgba(217, 4, 41, 0.45) !important;
+    height: 34px !important;
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-weight: 700;
+}
+
+#panel .panel-button {
+    color: #d4e0ff !important;
+    border-radius: 8px !important;
+    margin: 3px 3px !important;
+    padding: 0 10px !important;
+    border: 1px solid transparent !important;
+    transition-duration: 150ms !important;
+}
+
+#panel .panel-button:hover {
+    background-color: rgba(43, 108, 176, 0.15) !important;
+    color: #2b6cb0 !important;
+    border: 1px solid rgba(43, 108, 176, 0.70) !important;
+    box-shadow: inset 0 0 8px rgba(43, 108, 176, 0.25) !important;
+}
+
+#panel .panel-button:active,
+#panel .panel-button:overview,
+#panel .panel-button:focus,
+#panel .panel-button:checked {
+    background-color: rgba(217, 4, 41, 0.25) !important;
+    color: #2b6cb0 !important;
+    border: 1px solid #d90429 !important;
+    box-shadow: 0 0 12px rgba(217, 4, 41, 0.55) !important;
+}
+
+#panel .panel-button.clock-display .clock {
+    color: #2b6cb0 !important;
+    text-shadow: 0 0 8px rgba(43, 108, 176, 0.45);
+}
+
+.workspace-dot {
+    background-color: #d90429 !important;
+    box-shadow: 0 0 6px #d90429 !important;
+}
+
+/* --- SPIDER-HUD CUSTOM INDICATOR --- */
+.spider-hud-box {
+    spacing: 8px;
+    padding: 0 4px;
+}
+
+.spider-hud-badge {
+    color: #d90429;
+    font-weight: 800;
+    text-shadow: 0 0 8px rgba(217, 4, 41, 0.65);
+}
+
+.spider-hud-telemetry {
+    color: #2b6cb0;
+    font-weight: 700;
+    font-size: 11.5px;
+}
+
+.spider-hud-sense-ok {
+    color: #4ade80;
+    font-weight: 800;
+}
+
+.spider-hud-sense-alert {
+    color: #d90429;
+    font-weight: 800;
+}
+
+.spider-hud-menu-header {
+    font-weight: 800;
+    color: #d90429;
+    font-size: 13px;
+}
+
+.spider-hud-menu-sub {
+    color: #2b6cb0;
+    font-size: 11px;
+}
+
+/* --- 2. POPUP MENUS, CALENDAR & NOTIFICATIONS (DATEMENU POPOVER) --- */
+.popup-menu-content,
+.datemenu-popover,
+.candidate-popup-content,
+.modal-dialog {
+    background-color: rgba(11, 19, 44, 0.96) !important;
+    border: 1px solid rgba(43, 108, 176, 0.60) !important;
+    border-top: 2px solid #d90429 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.88), 0 0 22px rgba(217, 4, 41, 0.30) !important;
+    color: #d4e0ff !important;
+}
+
+#calendarArea {
+    padding: 6px !important;
+}
+
+.datemenu-calendar-column {
+    border-left: 1px solid rgba(43, 108, 176, 0.30) !important;
+    padding-left: 14px !important;
+}
+
+/* Today Header ("miércoles / 4 de noviembre de 2026") */
+.datemenu-today-button {
+    border-radius: 10px !important;
+    padding: 8px !important;
+    border: 1px solid transparent !important;
+}
+
+.datemenu-today-button:hover {
+    background-color: rgba(217, 4, 41, 0.16) !important;
+    border: 1px solid rgba(43, 108, 176, 0.45) !important;
+}
+
+.datemenu-today-button .day-label {
+    color: #2b6cb0 !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.8px;
+}
+
+.datemenu-today-button .date-label {
+    color: #d90429 !important;
+    font-weight: 800 !important;
+    text-shadow: 0 0 10px rgba(217, 4, 41, 0.40);
+}
+
+/* Calendar Grid */
+.calendar {
+    background-color: rgba(16, 26, 56, 0.85) !important;
+    border: 1px solid rgba(0, 153, 255, 0.35) !important;
+    border-radius: 12px !important;
+    padding: 8px !important;
+}
+
+.calendar-month-label {
+    color: #2b6cb0 !important;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+}
+
+.calendar-change-month-back,
+.calendar-change-month-forward,
+.pager-button {
+    color: #d90429 !important;
+    border-radius: 8px !important;
+}
+
+.pager-button:hover {
+    background-color: rgba(43, 108, 176, 0.20) !important;
+    color: #2b6cb0 !important;
+}
+
+.calendar-day-heading {
+    color: #2b6cb0 !important;
+    font-weight: 700 !important;
+}
+
+.calendar-day {
+    color: #d4e0ff !important;
+    border-radius: 50% !important;
+    border: 1px solid transparent !important;
+}
+
+.calendar-day:hover {
+    background-color: rgba(43, 108, 176, 0.22) !important;
+    color: #ffffff !important;
+    border-color: #2b6cb0 !important;
+}
+
+.calendar-today {
+    background-color: #d90429 !important;
+    color: #ffffff !important;
+    font-weight: 900 !important;
+    border: 1px solid #2b6cb0 !important;
+    box-shadow: 0 0 12px rgba(217, 4, 41, 0.75) !important;
+}
+
+.calendar-other-month {
+    color: rgba(130, 148, 196, 0.38) !important;
+}
+
+/* Bottom Cards in Calendar ("Hoy / No hay eventos", "Añadir relojes del mundo", "Seleccionar ubicación") */
+.events-button,
+.world-clocks-button,
+.weather-button {
+    background-color: rgba(18, 29, 62, 0.92) !important;
+    border: 1px solid rgba(43, 108, 176, 0.38) !important;
+    border-left: 3px solid #d90429 !important;
+    border-radius: 10px !important;
+    color: #d4e0ff !important;
+    padding: 10px 12px !important;
+    transition-duration: 150ms !important;
+}
+
+.events-button:hover,
+.world-clocks-button:hover,
+.weather-button:hover {
+    background-color: rgba(217, 4, 41, 0.22) !important;
+    border-color: #2b6cb0 !important;
+    color: #2b6cb0 !important;
+    box-shadow: 0 0 12px rgba(43, 108, 176, 0.30) !important;
+}
+
+.events-title,
+.world-clocks-header,
+.weather-header {
+    color: #2b6cb0 !important;
+    font-weight: 800 !important;
+}
+
+/* Left Side Notification Area ("No hay notificaciones") */
+.message-list-placeholder {
+    color: #2b6cb0 !important;
+    font-weight: 700 !important;
+}
+
+.message-list-clear-button {
+    background-color: rgba(217, 4, 41, 0.25) !important;
+    border: 1px solid #d90429 !important;
+    color: #ffffff !important;
+    border-radius: 8px !important;
+}
+
+.message-list-clear-button:hover {
+    background-color: #d90429 !important;
+    border-color: #2b6cb0 !important;
+}
+
+/* --- 3. QUICK SETTINGS & SYSTEM MENU --- */
+.popup-menu-item {
+    border-radius: 8px !important;
+    color: #d4e0ff !important;
+}
+
+.popup-menu-item:hover,
+.popup-menu-item:focus,
+.popup-menu-item.selected {
+    background-color: rgba(217, 4, 41, 0.22) !important;
+    color: #2b6cb0 !important;
+    border-left: 3px solid #d90429 !important;
+}
+
+.quick-toggle,
+.quick-menu-toggle .quick-toggle {
+    background-color: rgba(20, 31, 66, 0.92) !important;
+    border: 1px solid rgba(43, 108, 176, 0.35) !important;
+    border-radius: 10px !important;
+    color: #d4e0ff !important;
+}
+
+.quick-toggle:hover {
+    border-color: #2b6cb0 !important;
+    background-color: rgba(43, 108, 176, 0.15) !important;
+}
+
+.quick-toggle:checked {
+    background-color: #d90429 !important;
+    border-color: #2b6cb0 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 14px rgba(217, 4, 41, 0.55) !important;
+}
+
+.slider {
+    color: #2b6cb0 !important;
+    -barlevel-active-background-color: #d90429 !important;
+    -barlevel-active-border-color: #2b6cb0 !important;
+}
+
+/* --- 4. LOCK SCREEN / UNLOCK DIALOG (SPIDER-MAN 2099 BIOMETRIC AUTH) --- */
+.unlock-dialog-clock {
+    spacing: 1.2em !important;
+}
+
+.unlock-dialog-clock .unlock-dialog-clock-time {
+    color: #f1f5f9 !important;
+    font-family: "JetBrainsMono Nerd Font", monospace !important;
+    font-size: 5.2em !important;
+    font-weight: 400 !important;
+    padding: 0 20px !important;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85) !important;
+}
+
+.unlock-dialog-clock .unlock-dialog-clock-date {
+    color: #94a3b8 !important;
+    font-family: "JetBrainsMono Nerd Font", monospace !important;
+    font-size: 1.4em !important;
+    font-weight: 600 !important;
+    padding: 0 16px !important;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.80) !important;
+}
+
+.unlock-dialog-clock .unlock-dialog-clock-hint {
+    color: #64748b !important;
+    font-family: "JetBrainsMono Nerd Font", monospace !important;
+    text-shadow: none !important;
+}
+
+.user-widget .user-widget-label,
+.login-dialog-username {
+    color: #2b6cb0 !important;
+    font-weight: 800 !important;
+    text-shadow: 0 0 10px rgba(43, 108, 176, 0.50);
+}
+
+.user-icon {
+    border: 3px solid #d90429 !important;
+    box-shadow: 0 0 22px rgba(217, 4, 41, 0.70) !important;
+    background-color: rgba(12, 21, 48, 0.90) !important;
+}
+
+.login-dialog-prompt-entry {
+    background-color: rgba(11, 19, 46, 0.90) !important;
+    border: 2px solid #2b6cb0 !important;
+    border-radius: 10px !important;
+    color: #2b6cb0 !important;
+    box-shadow: 0 0 16px rgba(217, 4, 41, 0.45) !important;
+}
+
+.login-dialog-prompt-entry:focus {
+    border-color: #d90429 !important;
+    box-shadow: 0 0 20px rgba(217, 4, 41, 0.75) !important;
+}
+
+/* --- 5. DASH / DOCK & OVERVIEW --- */
+#dash .dash-background {
+    background-color: rgba(12, 20, 44, 0.88) !important;
+    border: 1px solid rgba(43, 108, 176, 0.55) !important;
+    border-bottom: 2px solid #d90429 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 24px rgba(217, 4, 41, 0.35), inset 0 0 12px rgba(43, 108, 176, 0.12) !important;
+}
+
+#dash .app-well-app:hover .overview-icon,
+#dash .show-apps:hover .overview-icon {
+    background-color: rgba(217, 4, 41, 0.25) !important;
+    border: 1px solid #2b6cb0 !important;
+    box-shadow: 0 0 12px rgba(43, 108, 176, 0.45) !important;
+}
+
+.app-well-app-running-dot {
+    background-color: #d90429 !important;
+    box-shadow: 0 0 8px #d90429 !important;
+    width: 10px !important;
+    height: 4px !important;
+    border-radius: 2px !important;
+}
+
+#overviewGroup {
+    background-color: rgba(9, 16, 37, 0.85) !important;
+}
+
+.search-entry {
+    background-color: rgba(16, 25, 52, 0.92) !important;
+    border: 2px solid #d90429 !important;
+    border-radius: 12px !important;
+    color: #2b6cb0 !important;
+    box-shadow: 0 0 18px rgba(217, 4, 41, 0.40) !important;
+}
+
+.search-entry:focus {
+    border-color: #2b6cb0 !important;
+    box-shadow: 0 0 22px rgba(43, 108, 176, 0.55) !important;
+}
+
+.workspace-thumbnail-indicator {
+    border: 2px solid #d90429 !important;
+    box-shadow: 0 0 12px rgba(217, 4, 41, 0.55) !important;
+    border-radius: 6px !important;
+}
+
+.message,
+.notification-banner {
+    background-color: rgba(14, 23, 50, 0.95) !important;
+    border: 1px solid rgba(43, 108, 176, 0.50) !important;
+    border-left: 4px solid #d90429 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 16px rgba(217, 4, 41, 0.28) !important;
+}
